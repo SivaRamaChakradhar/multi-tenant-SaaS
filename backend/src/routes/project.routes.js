@@ -41,4 +41,12 @@ router.delete(
   ProjectController.deleteProject
 );
 
+// API: Get single project
+router.get(
+  "/projects/:projectId",
+  auth,
+  ProjectController.getProject
+);
+
+
 module.exports = router;
