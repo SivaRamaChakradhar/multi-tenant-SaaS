@@ -198,6 +198,39 @@ class ProjectController {
       message: "Project deleted successfully"
     });
   }
+  // --------------------------------------------------
+// API: GET SINGLE PROJECT
+// --------------------------------------------------
+static async getProject(req, res, next) {
+  try {
+    const { projectId } = req.params;
+
+    const project = db
+      .prepare(
+        `SELECT p.*, u.full_name as creatorName 
+         FROM projects p
+         LEFT JOIN users u ON p.created_by = u.id
+         WHERE p.id = ?`
+      )
+      .get(projectId);
+
+    if (!project) {
+      return res.status(404).json({
+        success: false,
+        message: "Project not found"
+      });
+    }
+
+    return res.json({
+      success: true,
+      data: { project }
+    });
+
+  } catch (err) {
+    next(err);
+  }
+}
+
 }
 
 module.exports = ProjectController;
