@@ -266,25 +266,42 @@ exports.getProjectById = async (req, res) => {
   const { id } = req.params;
   const tenantId = req.user.tenantId;
 
-  const result = await pool.query(
-    `
-    SELECT *
-    FROM projects
-    WHERE id = $1 AND tenant_id = $2
-    `,
-    [id, tenantId]
-  );
-
-  if (!result.rowCount) {
-    return res.status(404).json({
+  // ✅ GUARD CLAUSE
+  if (!id) {
+    return res.status(400).json({
       success: false,
-      message: "Project not found",
+      message: "Project ID is required",
     });
   }
 
-  res.status(200).json({
-    success: true,
-    data: result.rows[0],
-  });
+  try {
+    const result = await pool.query(
+      `
+      SELECT *
+      FROM projects
+      WHERE id = $1 AND tenant_id = $2
+      `,
+      [id, tenantId]
+    );
+
+    if (!result.rowCount) {
+      return res.status(404).json({
+        success: false,
+        message: "Project not found",
+      });
+    }
+
+    res.status(200).json({
+      success: true,
+      data: result.rows[0],
+    });
+  } catch (error) {
+    console.error("getProjectById error:", error);
+    res.status(500).json({
+      success: false,
+      message: "Failed to fetch project",
+    });
+  }
 };
+
 

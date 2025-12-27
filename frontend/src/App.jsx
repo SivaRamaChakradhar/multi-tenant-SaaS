@@ -46,7 +46,7 @@ export default function App() {
           />
 
           <Route
-            path="/projects/:id"
+            path="/projects/:projectId"
             element={
               <ProtectedRoute>
                 <Navbar />
@@ -54,6 +54,7 @@ export default function App() {
               </ProtectedRoute>
             }
           />
+
 
           <Route
             path="/users"

@@ -20,17 +20,13 @@ export default function Dashboard() {
   const [taskFilter, setTaskFilter] = useState("all");
 
   useEffect(() => {
-    fetchDashboardData();
+    loadDashboard();
   }, []);
 
-  const fetchDashboardData = async () => {
+  const loadDashboard = async () => {
     try {
-      const projectsRes = await axiosClient.get("/projects");
-      const projects =
-        projectsRes.data.data?.projects ||
-        projectsRes.data.data?.rows ||
-        projectsRes.data.data ||
-        [];
+      const res = await axiosClient.get("/projects");
+      const projects = res.data.data?.projects || [];
 
       setRecentProjects(projects.slice(0, 5));
 
@@ -39,76 +35,74 @@ export default function Dashboard() {
       );
 
       const taskResponses = await Promise.all(taskRequests);
-      const allTasks = taskResponses.flatMap((r) =>
-        Array.isArray(r.data.data) ? r.data.data : []
-      );
+      const tasks = taskResponses.flatMap(r => r.data.data || []);
 
-      const completed = allTasks.filter(
-        (t) => t.status === "completed"
-      ).length;
+      const completed = tasks.filter(t => t.status === "completed").length;
 
-      setMyTasks(allTasks);
+      setMyTasks(tasks);
       setStats({
         totalProjects: projects.length,
-        totalTasks: allTasks.length,
+        totalTasks: tasks.length,
         completedTasks: completed,
-        pendingTasks: allTasks.length - completed,
+        pendingTasks: tasks.length - completed,
       });
     } catch (err) {
-      console.error("Dashboard load failed", err);
+      console.error(err);
     }
   };
 
-  const filteredTasks =
+  const visibleTasks =
     taskFilter === "all"
       ? myTasks
-      : myTasks.filter((t) => t.status === taskFilter);
+      : myTasks.filter(t => t.status === taskFilter);
 
   return (
-    <div className="dashboard">
-      <div className="dashboard-inner">
-        <h2>Dashboard</h2>
+    <div className="dashboard-root">
+      <header className="dashboard-header">
+        <h1>Welcome, {user.fullName}</h1>
+        <p>Here’s what’s happening in your workspace</p>
+      </header>
 
-        {/* ===== STATS ===== */}
-        <div className="stats-grid">
-          <StatCard title="Total Projects" value={stats.totalProjects} />
-          <StatCard title="Total Tasks" value={stats.totalTasks} />
-          <StatCard title="Completed Tasks" value={stats.completedTasks} />
-          <StatCard title="Pending Tasks" value={stats.pendingTasks} />
+      {/* STATS */}
+      <section className="stats-section">
+        <Stat label="Projects" value={stats.totalProjects} />
+        <Stat label="Total Tasks" value={stats.totalTasks} />
+        <Stat label="Completed" value={stats.completedTasks} />
+        <Stat label="Pending" value={stats.pendingTasks} />
+      </section>
+
+      {/* CONTENT */}
+      <section className="dashboard-content">
+        {/* PROJECTS */}
+        <div className="panel">
+          <div className="panel-header">
+            <h3>Recent Projects</h3>
+          </div>
+
+          {recentProjects.length === 0 ? (
+            <Empty text="No projects yet" />
+          ) : (
+            recentProjects.map(p => (
+              <div
+                key={p.id}
+                className="project-card"
+                onClick={() => navigate(`/projects/${p.id}`)}
+              >
+                <div>
+                  <strong>{p.name}</strong>
+                  <span className={`status ${p.status}`}>
+                    {p.status}
+                  </span>
+                </div>
+                <small>{p.task_count || 0} tasks</small>
+              </div>
+            ))
+          )}
         </div>
 
-        {/* ===== LISTS ===== */}
-        <div className="lists-wrapper">
-          {/* Recent Projects */}
-          <section>
-            <h3>Recent Projects</h3>
-            {recentProjects.length === 0 ? (
-              <p className="empty-state">No projects found</p>
-            ) : (
-              <ul className="project-list">
-                {recentProjects.map((project) => (
-                  <li
-                    key={project.id}
-                    className="clickable"
-                    onClick={() => project.id && navigate(`/projects/${project.id}`)}
-                  >
-                    <div className="list-header">
-                      <strong>{project.name}</strong>
-                      <span className={`badge status-${project.status}`}>
-                        {project.status}
-                      </span>
-                    </div>
-                    <div className="list-meta">
-                      <span>Tasks: {project.taskCount || 0}</span>
-                    </div>
-                  </li>
-                ))}
-              </ul>
-            )}
-          </section>
-
-          {/* My Tasks */}
-          <section>
+        {/* TASKS */}
+        <div className="panel">
+          <div className="panel-header">
             <h3>My Tasks</h3>
             <select
               value={taskFilter}
@@ -119,45 +113,38 @@ export default function Dashboard() {
               <option value="in_progress">In Progress</option>
               <option value="completed">Completed</option>
             </select>
+          </div>
 
-            {filteredTasks.length === 0 ? (
-              <p className="empty-state">No tasks assigned</p>
-            ) : (
-              <ul className="task-list">
-                {filteredTasks.map((task) => {
-                  const normalizedStatus = (task.status || "").replace("-", "_");
-                  return (
-                    <li key={task.id}>
-                      <div className="list-header">
-                        <strong>{task.title}</strong>
-                        <span
-                          className={`task-item-status status-${normalizedStatus}`}
-                        >
-                          {normalizedStatus.replace("_", " ")}
-                        </span>
-                      </div>
-                      <div className="list-meta">
-                        <span>{task.project_name}</span>
-                        <span className="priority">{task.priority}</span>
-                        <span>{task.due_date || "No due date"}</span>
-                      </div>
-                    </li>
-                  );
-                })}
-              </ul>
-            )}
-          </section>
+          {visibleTasks.length === 0 ? (
+            <Empty text="No tasks assigned" />
+          ) : (
+            visibleTasks.map(t => (
+              <div key={t.id} className="task-row">
+                <div>
+                  <strong>{t.title}</strong>
+                  <small>{t.project_name}</small>
+                </div>
+                <span className={`status ${t.status}`}>
+                  {t.status.replace("_", " ")}
+                </span>
+              </div>
+            ))
+          )}
         </div>
-      </div>
+      </section>
     </div>
   );
 }
 
-function StatCard({ title, value }) {
+function Stat({ label, value }) {
   return (
-    <div className="stat-card">
-      <h4>{title}</h4>
-      <p>{value}</p>
+    <div className="stat-tile">
+      <span>{label}</span>
+      <h2>{value}</h2>
     </div>
   );
+}
+
+function Empty({ text }) {
+  return <div className="empty">{text}</div>;
 }

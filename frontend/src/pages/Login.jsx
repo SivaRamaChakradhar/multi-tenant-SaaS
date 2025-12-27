@@ -18,16 +18,30 @@ export default function Login() {
   const [error, setError] = useState("");
 
   const submit = async (e) => {
-    e.preventDefault();
-    try {
-      const res = await axiosClient.post("/auth/login", form);
-      localStorage.setItem("token", res.data.data.token);
-      setUser(res.data.data.user);
-      navigate("/dashboard");
-    } catch (err) {
-      setError("Invalid credentials");
-    }
-  };
+      e.preventDefault();
+      setError("");
+
+      try {
+        const payload = {
+          email: form.email,
+          password: form.password,
+        };
+
+        // Only send tenantSubdomain if filled
+        if (form.tenantSubdomain?.trim()) {
+          payload.tenantSubdomain = form.tenantSubdomain.trim();
+        }
+
+        const res = await axiosClient.post("/auth/login", payload);
+
+        localStorage.setItem("token", res.data.data.token);
+        setUser(res.data.data.user);
+        navigate("/dashboard");
+      } catch (err) {
+        setError(err.response?.data?.message || "Login failed");
+      }
+    };
+
 
   return (
     <div className="login-wrapper">

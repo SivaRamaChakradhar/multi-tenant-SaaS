@@ -1,6 +1,7 @@
 import { useParams } from "react-router-dom";
 import { useEffect, useState } from "react";
 import axiosClient from "../api/axiosClient";
+import "./ProjectDetails.css";
 
 export default function ProjectDetails() {
   const { projectId } = useParams();
@@ -31,48 +32,80 @@ export default function ProjectDetails() {
     loadData();
   };
 
-  if (!project) return <p>Loading...</p>;
+  if (!project) return <p className="loading">Loading...</p>;
 
   return (
-    <div>
-      <h2>{project.name}</h2>
-      <p>{project.description}</p>
+    <div className="project-details-page">
+      {/* HEADER */}
+      <div className="project-header">
+        <div>
+          <h2>{project.name}</h2>
+          <p className="description">{project.description || "No description"}</p>
+        </div>
 
-      <h3>Tasks</h3>
+        <span className={`status-badge status-${project.status}`}>
+          {project.status}
+        </span>
+      </div>
 
-      {tasks.length === 0 ? (
-        <p>No tasks</p>
-      ) : (
-        <table>
-          <thead>
-            <tr>
-              <th>Title</th>
-              <th>Status</th>
-              <th>Priority</th>
-              <th>Assigned</th>
-              <th>Due</th>
-              <th>Actions</th>
-            </tr>
-          </thead>
-          <tbody>
-            {tasks.map((t) => (
-              <tr key={t.id}>
-                <td>{t.title}</td>
-                <td>{t.status}</td>
-                <td>{t.priority}</td>
-                <td>{t.assignee_name}</td>
-                <td>{t.due_date}</td>
-                <td>
-                  <button onClick={() => updateStatus(t.id, "completed")}>
-                    Complete
-                  </button>
-                  <button onClick={() => deleteTask(t.id)}>Delete</button>
-                </td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
-      )}
+      {/* TASKS */}
+      <div className="tasks-section">
+        <h3>Tasks</h3>
+
+        {tasks.length === 0 ? (
+          <p className="empty-state">No tasks available</p>
+        ) : (
+          <div className="table-wrapper">
+            <table className="tasks-table">
+              <thead>
+                <tr>
+                  <th>Title</th>
+                  <th>Status</th>
+                  <th>Priority</th>
+                  <th>Assigned</th>
+                  <th>Due</th>
+                  <th>Actions</th>
+                </tr>
+              </thead>
+              <tbody>
+                {tasks.map((t) => (
+                  <tr key={t.id}>
+                    <td>{t.title}</td>
+                    <td>
+                      <span className={`task-badge status-${t.status}`}>
+                        {t.status}
+                      </span>
+                    </td>
+                    <td>
+                      <span className={`task-badge priority-${t.priority}`}>
+                        {t.priority}
+                      </span>
+                    </td>
+                    <td>{t.assignee_name || "-"}</td>
+                    <td>{t.due_date || "N/A"}</td>
+                    <td className="actions">
+                      {t.status !== "completed" && (
+                        <button
+                          className="btn-success"
+                          onClick={() => updateStatus(t.id, "completed")}
+                        >
+                          Complete
+                        </button>
+                      )}
+                      <button
+                        className="btn-danger"
+                        onClick={() => deleteTask(t.id)}
+                      >
+                        Delete
+                      </button>
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+        )}
+      </div>
     </div>
   );
 }

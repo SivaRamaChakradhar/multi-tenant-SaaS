@@ -1,57 +1,134 @@
 import { useState } from "react";
 import axiosClient from "../api/axiosClient";
+import "./UserModal.css";
 
-export default function UserModal({ user, onClose, onSaved }) {
+export default function UserModal({
+  tenantId,
+  user,
+  onClose,
+  onSaved,
+}) {
   const [form, setForm] = useState({
+    full_name: user?.full_name || "",
     email: user?.email || "",
-    fullName: user?.full_name || "",
     password: "",
     role: user?.role || "user",
-    isActive: user?.is_active ?? true,
+    is_active: user?.is_active ?? true,
   });
 
-  const submit = async () => {
-    if (!form.email || !form.fullName) return alert("Required fields");
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState("");
 
-    if (user) {
-      await axiosClient.put(`/users/${user.id}`, form);
-    } else {
-      await axiosClient.post("/tenants/me/users", form);
+  // 🛡️ Safety guard
+  if (!tenantId) return null;
+
+  const submit = async (e) => {
+    e.preventDefault();
+    setError("");
+
+    try {
+      setLoading(true);
+
+      if (user) {
+        // UPDATE
+        await axiosClient.put(`/users/${user.id}`, form);
+      } else {
+        // CREATE
+        await axiosClient.post(
+          `/tenants/${tenantId}/users`,
+          form
+        );
+      }
+
+      onSaved();
+      onClose();
+    } catch (err) {
+      setError(
+        err.response?.data?.message || "Operation failed"
+      );
+    } finally {
+      setLoading(false);
     }
-
-    onSaved();
-    onClose();
   };
 
   return (
-    <div className="modal">
-      <h3>{user ? "Edit User" : "Add User"}</h3>
+    <div className="modal-overlay">
+      <div className="modal">
+        <h3>{user ? "Edit User" : "Add User"}</h3>
 
-      <input placeholder="Email" value={form.email}
-        onChange={(e) => setForm({ ...form, email: e.target.value })} />
+        {error && <p className="error">{error}</p>}
 
-      <input placeholder="Full Name" value={form.fullName}
-        onChange={(e) => setForm({ ...form, fullName: e.target.value })} />
+        <form onSubmit={submit}>
+          <input
+            type="text"
+            placeholder="Full Name"
+            value={form.full_name}
+            onChange={(e) =>
+              setForm({ ...form, full_name: e.target.value })
+            }
+            required
+          />
 
-      {!user && (
-        <input type="password" placeholder="Password"
-          onChange={(e) => setForm({ ...form, password: e.target.value })} />
-      )}
+          <input
+            type="email"
+            placeholder="Email"
+            value={form.email}
+            onChange={(e) =>
+              setForm({ ...form, email: e.target.value })
+            }
+            required
+          />
 
-      <select value={form.role}
-        onChange={(e) => setForm({ ...form, role: e.target.value })}>
-        <option value="user">User</option>
-        <option value="tenant_admin">Tenant Admin</option>
-      </select>
+          {!user && (
+            <input
+              type="password"
+              placeholder="Password"
+              value={form.password}
+              onChange={(e) =>
+                setForm({ ...form, password: e.target.value })
+              }
+              required
+            />
+          )}
 
-      <label>
-        <input type="checkbox" checked={form.isActive}
-          onChange={(e) => setForm({ ...form, isActive: e.target.checked })} />
-        Active
-      </label>
+          <select
+            value={form.role}
+            onChange={(e) =>
+              setForm({ ...form, role: e.target.value })
+            }
+          >
+            <option value="user">User</option>
+            <option value="tenant_admin">Tenant Admin</option>
+          </select>
 
-      <button onClick={submit}>Save</button>
-      <button onClick={onClose}>Cancel</button>
+          <label className="checkbox">
+            <input
+              type="checkbox"
+              checked={form.is_active}
+              onChange={(e) =>
+                setForm({
+                  ...form,
+                  is_active: e.target.checked,
+                })
+              }
+            />
+            Active
+          </label>
+
+          <div className="modal-actions">
+            <button
+              type="button"
+              className="secondary"
+              onClick={onClose}
+            >
+              Cancel
+            </button>
+            <button type="submit" disabled={loading}>
+              {loading ? "Saving..." : "Save"}
+            </button>
+          </div>
+        </form>
+      </div>
     </div>
   );
 }

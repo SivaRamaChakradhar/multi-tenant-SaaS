@@ -1,39 +1,78 @@
 import { useContext, useState } from "react";
-import { Link } from "react-router-dom";
+import { NavLink } from "react-router-dom";
 import { AuthContext } from "../context/AuthContext";
-import './Navbar.css';
+import "./Navbar.css";
 
 export default function Navbar() {
   const { user, logout } = useContext(AuthContext);
-  const [isOpen, setIsOpen] = useState(false);
+  const [open, setOpen] = useState(false);
 
   if (!user) return null;
 
   return (
-    <nav className="navbar">
-      <div className="nav-brand">
-        <b>Multi-Tenant SaaS</b>
-      </div>
-
-      {/* Hamburger Menu Icon */}
-      <div className="nav-toggle" onClick={() => setIsOpen(!isOpen)}>
-        <span className="bar"></span>
-        <span className="bar"></span>
-        <span className="bar"></span>
-      </div>
-
-      <div className={`nav-links ${isOpen ? "open" : ""}`}>
-        <Link to="/dashboard" onClick={() => setIsOpen(false)}>Dashboard</Link>
-        <Link to="/projects" onClick={() => setIsOpen(false)}>Projects</Link>
-        {user.role === "tenant_admin" && (
-          <Link to="/users" onClick={() => setIsOpen(false)}>Users</Link>
-        )}
-
-        <div className="nav-user">
-          <span className="user-info">{user.fullName} <small>({user.role})</small></span>
-          <button className="logout-btn" onClick={logout}>Logout</button>
+    <header className="app-header">
+      <div className="nav-container">
+        {/* BRAND */}
+        <div className="nav-brand">
+          <span className="logo-dot" />
+          <span className="logo-text">Multi-Tenant SaaS</span>
         </div>
+
+        {/* DESKTOP LINKS */}
+        <nav className="nav-links desktop">
+          <NavLink to="/dashboard">Dashboard</NavLink>
+          <NavLink to="/projects">Projects</NavLink>
+          {user.role === "tenant_admin" && (
+            <NavLink to="/users">Users</NavLink>
+          )}
+        </nav>
+
+        {/* USER ACTIONS */}
+        <div className="nav-actions desktop">
+          <span className="nav-user">
+            {user.fullName}
+            <small>{user.role}</small>
+          </span>
+          <button className="logout-btn" onClick={logout}>
+            Logout
+          </button>
+        </div>
+
+        {/* MOBILE TOGGLE */}
+        <button
+          className="menu-toggle"
+          onClick={() => setOpen(!open)}
+          aria-label="Toggle menu"
+        >
+          <span />
+          <span />
+          <span />
+        </button>
       </div>
-    </nav>
+
+      {/* MOBILE MENU */}
+      {open && (
+        <div className="mobile-menu">
+          <NavLink to="/dashboard" onClick={() => setOpen(false)}>
+            Dashboard
+          </NavLink>
+          <NavLink to="/projects" onClick={() => setOpen(false)}>
+            Projects
+          </NavLink>
+          {user.role === "tenant_admin" && (
+            <NavLink to="/users" onClick={() => setOpen(false)}>
+              Users
+            </NavLink>
+          )}
+
+          <div className="mobile-footer">
+            <span>
+              {user.fullName} <small>({user.role})</small>
+            </span>
+            <button onClick={logout}>Logout</button>
+          </div>
+        </div>
+      )}
+    </header>
   );
 }

@@ -1,0 +1,140 @@
+.project-details-page {
+  padding: 2.5rem 3rem;
+  max-width: 1400px;
+  margin: 0 auto;
+  color: #e8ecf1;
+}
+
+/* HEADER */
+.project-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background: rgba(255,255,255,0.08);
+  backdrop-filter: blur(20px);
+  border: 1px solid rgba(255,255,255,0.15);
+  border-radius: 18px;
+  padding: 1.8rem 2rem;
+  margin-bottom: 2.5rem;
+}
+
+.project-header h2 {
+  margin: 0;
+  font-size: 2rem;
+}
+
+.project-header .description {
+  margin-top: 0.4rem;
+  color: #aab4c2;
+}
+
+/* STATUS BADGE */
+.status-badge {
+  padding: 6px 14px;
+  border-radius: 999px;
+  text-transform: uppercase;
+  font-size: 0.75rem;
+  font-weight: 700;
+  border: 1px solid;
+}
+
+.status-active {
+  color: #6c8aff;
+  border-color: #6c8aff;
+}
+
+.status-completed {
+  color: #51cf66;
+  border-color: #51cf66;
+}
+
+.status-archived {
+  color: #ffd43b;
+  border-color: #ffd43b;
+}
+
+/* TASKS */
+.tasks-section h3 {
+  margin-bottom: 1.2rem;
+}
+
+.table-wrapper {
+  background: rgba(255,255,255,0.05);
+  backdrop-filter: blur(16px);
+  border-radius: 16px;
+  overflow-x: auto;
+}
+
+.tasks-table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.tasks-table th,
+.tasks-table td {
+  padding: 14px 16px;
+  border-bottom: 1px solid rgba(255,255,255,0.1);
+}
+
+.tasks-table th {
+  text-align: left;
+  font-size: 0.8rem;
+  text-transform: uppercase;
+  color: #aab4c2;
+}
+
+/* BADGES */
+.task-badge {
+  padding: 4px 10px;
+  border-radius: 999px;
+  font-size: 0.7rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  border: 1px solid;
+}
+
+.priority-high {
+  color: #ff6b6b;
+  border-color: #ff6b6b;
+}
+
+.priority-medium {
+  color: #ffd43b;
+  border-color: #ffd43b;
+}
+
+.priority-low {
+  color: #51cf66;
+  border-color: #51cf66;
+}
+
+/* ACTIONS */
+.actions button {
+  margin-right: 6px;
+  padding: 6px 10px;
+  border-radius: 8px;
+  border: none;
+  cursor: pointer;
+  font-size: 0.75rem;
+}
+
+.btn-success {
+  background: rgba(81, 207, 102, 0.2);
+  color: #51cf66;
+}
+
+.btn-danger {
+  background: rgba(255, 107, 107, 0.2);
+  color: #ff6b6b;
+}
+
+/* STATES */
+.empty-state {
+  color: #aab4c2;
+  font-style: italic;
+}
+
+.loading {
+  padding: 3rem;
+  text-align: center;
+}

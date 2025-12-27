@@ -22,32 +22,34 @@ export default function ProjectModal({ project, onClose, onSaved }) {
   };
 
   return (
-    <div className="modal">
-      <h3>{project ? "Edit Project" : "Create Project"}</h3>
+    <div className="modal-overlay">
+      <div className="modal">
+        <h3>{project ? "Edit Project" : "Create Project"}</h3>
 
-      <input
-        placeholder="Project Name"
-        value={form.name}
-        onChange={(e) => setForm({ ...form, name: e.target.value })}
-      />
+        <input
+          placeholder="Project Name"
+          value={form.name}
+          onChange={(e) => setForm({ ...form, name: e.target.value })}
+        />
 
-      <textarea
-        placeholder="Description"
-        value={form.description}
-        onChange={(e) => setForm({ ...form, description: e.target.value })}
-      />
+        <textarea
+          placeholder="Description"
+          value={form.description}
+          onChange={(e) => setForm({ ...form, description: e.target.value })}
+        />
 
-      <select
-        value={form.status}
-        onChange={(e) => setForm({ ...form, status: e.target.value })}
-      >
-        <option value="active">Active</option>
-        <option value="completed">Completed</option>
-        <option value="archived">Archived</option>
-      </select>
+        <select
+          value={form.status}
+          onChange={(e) => setForm({ ...form, status: e.target.value })}
+        >
+          <option value="active">Active</option>
+          <option value="completed">Completed</option>
+          <option value="archived">Archived</option>
+        </select>
 
-      <button onClick={submit}>Save</button>
-      <button onClick={onClose}>Cancel</button>
+        <button onClick={submit}>Save</button>
+        <button onClick={onClose}>Cancel</button>
+      </div>
     </div>
   );
 }

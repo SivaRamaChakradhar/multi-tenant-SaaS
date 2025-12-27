@@ -1,0 +1,85 @@
+/* Overlay behind modal */
+.user-modal-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.55);
+  display: grid;
+  place-items: center;
+  z-index: 999;
+}
+
+/* Modal container */
+.user-modal {
+  width: 100%;
+  max-width: 480px;
+
+  background: #ffffff;
+  border-radius: 18px;
+  padding: 22px 20px;
+
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+
+  box-shadow: 0 25px 40px rgba(0, 0, 0, 0.15);
+}
+
+/* Title */
+.user-modal h3 {
+  margin: 0 0 6px;
+  text-align: center;
+  font-size: 1.3rem;
+  font-weight: 700;
+}
+
+/* Inputs */
+.user-modal input,
+.user-modal select {
+  border: 1px solid #d8dce6;
+  border-radius: 10px;
+  padding: 10px 12px;
+  font-size: 0.95rem;
+  outline: none;
+}
+
+.user-modal input:focus,
+.user-modal select:focus {
+  border-color: #3f8cff;
+  box-shadow: 0 0 0 2px rgba(63, 140, 255, 0.15);
+}
+
+/* Checkbox row */
+.user-modal label {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+  font-size: 0.9rem;
+  color: #333;
+}
+
+/* Buttons */
+.user-modal button {
+  padding: 10px 12px;
+  border-radius: 10px;
+  border: none;
+  cursor: pointer;
+  font-weight: 600;
+}
+
+.user-modal button:first-of-type {
+  background: #3f8cff;
+  color: white;
+}
+
+.user-modal button:last-of-type {
+  background: #f3f4f8;
+}
+
+/* Responsive */
+@media (max-width: 520px) {
+  .user-modal {
+    max-width: 95%;
+    padding: 18px 14px;
+    border-radius: 14px;
+  }
+}

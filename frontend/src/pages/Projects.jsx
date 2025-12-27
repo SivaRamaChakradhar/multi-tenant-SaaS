@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import axiosClient from "../api/axiosClient";
 import ProjectModal from "../components/ProjectModal";
 import { useNavigate } from "react-router-dom";
+import "./Projects.css";
 
 export default function Projects() {
   const navigate = useNavigate();
@@ -17,10 +18,18 @@ export default function Projects() {
   }, [filter]);
 
   const fetchProjects = async () => {
-    const res = await axiosClient.get(
-      filter === "all" ? "/projects" : `/projects?status=${filter}`
-    );
-    setProjects(res.data.data || []);
+    try {
+      const res = await axiosClient.get(
+        filter === "all" ? "/projects" : `/projects?status=${filter}`
+      );
+
+      const projectsData =
+        res.data.data?.projects || res.data.data || [];
+
+      setProjects(projectsData);
+    } catch (err) {
+      console.error("Failed to load projects", err);
+    }
   };
 
   const deleteProject = async (id) => {
@@ -30,23 +39,27 @@ export default function Projects() {
   };
 
   const filteredProjects = projects.filter((p) =>
-    p.name.toLowerCase().includes(search.toLowerCase())
+    p.name?.toLowerCase().includes(search.toLowerCase())
   );
 
   return (
-    <div>
-      <h2>Projects</h2>
+    <div className="projects-page">
+      <div className="projects-header">
+        <h2>Projects</h2>
 
-      <div className="toolbar">
-        <button onClick={() => setShowModal(true)}>+ New Project</button>
+        <button className="primary-btn" onClick={() => setShowModal(true)}>
+          + New Project
+        </button>
+      </div>
 
+      <div className="projects-toolbar">
         <input
-          placeholder="Search projects"
+          placeholder="Search projects..."
           value={search}
           onChange={(e) => setSearch(e.target.value)}
         />
 
-        <select onChange={(e) => setFilter(e.target.value)}>
+        <select value={filter} onChange={(e) => setFilter(e.target.value)}>
           <option value="all">All</option>
           <option value="active">Active</option>
           <option value="completed">Completed</option>
@@ -55,9 +68,9 @@ export default function Projects() {
       </div>
 
       {filteredProjects.length === 0 ? (
-        <p>No projects found</p>
+        <p className="empty-state">No projects found</p>
       ) : (
-        <table>
+        <table className="projects-table">
           <thead>
             <tr>
               <th>Name</th>
@@ -71,20 +84,30 @@ export default function Projects() {
             {filteredProjects.map((p) => (
               <tr key={p.id}>
                 <td>{p.name}</td>
-                <td>{p.status}</td>
-                <td>{p.task_count || 0}</td>
-                <td>{new Date(p.created_at).toLocaleDateString()}</td>
                 <td>
+                  <span className={`badge status-${p.status}`}>
+                    {p.status}
+                  </span>
+                </td>
+                <td>{p.taskCount ?? p.task_count ?? 0}</td>
+                <td>
+                  {p.created_at
+                    ? new Date(p.created_at).toLocaleDateString()
+                    : "-"}
+                </td>
+                <td className="actions">
                   <button onClick={() => navigate(`/projects/${p.id}`)}>
                     View
                   </button>
-                  <button onClick={() => {
-                    setEditingProject(p);
-                    setShowModal(true);
-                  }}>
+                  <button
+                    onClick={() => {
+                      setEditingProject(p);
+                      setShowModal(true);
+                    }}
+                  >
                     Edit
                   </button>
-                  <button onClick={() => deleteProject(p.id)}>
+                  <button className="danger" onClick={() => deleteProject(p.id)}>
                     Delete
                   </button>
                 </td>

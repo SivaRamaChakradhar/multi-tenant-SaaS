@@ -79,64 +79,104 @@ exports.registerTenant = async (req, res) => {
 exports.login = async (req, res) => {
   const { email, password, tenantSubdomain } = req.body;
 
-  // 1️⃣ Find tenant
-  const tenantResult = await pool.query(
-    `SELECT * FROM tenants WHERE subdomain = $1 AND status = 'active'`,
-    [tenantSubdomain]
-  );
+  try {
+    let user;
+    let tenant = null;
 
-  if (!tenantResult.rowCount) {
-    return res
-      .status(404)
-      .json({ success: false, message: "Tenant not found" });
-  }
+    // ===============================
+    // 1️⃣ SUPER ADMIN LOGIN
+    // ===============================
+    if (!tenantSubdomain) {
+      const userResult = await pool.query(
+        `SELECT * FROM users WHERE email = $1 AND role = 'super_admin'`,
+        [email]
+      );
 
-  const tenant = tenantResult.rows[0];
+      if (!userResult.rowCount) {
+        return res.status(401).json({
+          success: false,
+          message: "Invalid credentials",
+        });
+      }
 
-  // 2️⃣ Find user
-  const userResult = await pool.query(
-    `SELECT * FROM users WHERE email = $1 AND tenant_id = $2`,
-    [email, tenant.id]
-  );
+      user = userResult.rows[0];
+    }
 
-  if (!userResult.rowCount) {
-    return res
-      .status(401)
-      .json({ success: false, message: "Invalid credentials" });
-  }
+    // ===============================
+    // 2️⃣ TENANT USER / ADMIN LOGIN
+    // ===============================
+    else {
+      const tenantResult = await pool.query(
+        `SELECT * FROM tenants WHERE subdomain = $1 AND status = 'active'`,
+        [tenantSubdomain]
+      );
 
-  const user = userResult.rows[0];
+      if (!tenantResult.rowCount) {
+        return res.status(404).json({
+          success: false,
+          message: "Tenant not found",
+        });
+      }
 
-  // 3️⃣ Check password
-  const isValid = await bcrypt.compare(password, user.password_hash);
-  if (!isValid) {
-    return res
-      .status(401)
-      .json({ success: false, message: "Invalid credentials" });
-  }
+      tenant = tenantResult.rows[0];
 
-  // 4️⃣ Generate JWT
-  const token = signToken({
-    userId: user.id,
-    tenantId: user.tenant_id,
-    role: user.role,
-  });
+      const userResult = await pool.query(
+        `SELECT * FROM users WHERE email = $1 AND tenant_id = $2`,
+        [email, tenant.id]
+      );
 
-  res.status(200).json({
-    success: true,
-    data: {
-      user: {
-        id: user.id,
-        email: user.email,
-        fullName: user.full_name,
-        role: user.role,
-        tenantId: user.tenant_id,
+      if (!userResult.rowCount) {
+        return res.status(401).json({
+          success: false,
+          message: "Invalid credentials",
+        });
+      }
+
+      user = userResult.rows[0];
+    }
+
+    // ===============================
+    // 3️⃣ PASSWORD CHECK
+    // ===============================
+    const isValid = await bcrypt.compare(password, user.password_hash);
+    if (!isValid) {
+      return res.status(401).json({
+        success: false,
+        message: "Invalid credentials",
+      });
+    }
+
+    // ===============================
+    // 4️⃣ JWT TOKEN
+    // ===============================
+    const token = signToken({
+      userId: user.id,
+      tenantId: user.tenant_id || null,
+      role: user.role,
+    });
+
+    res.status(200).json({
+      success: true,
+      data: {
+        user: {
+          id: user.id,
+          email: user.email,
+          fullName: user.full_name,
+          role: user.role,
+          tenantId: user.tenant_id || null,
+        },
+        token,
+        expiresIn: 86400,
       },
-      token,
-      expiresIn: 86400,
-    },
-  });
+    });
+  } catch (error) {
+    res.status(500).json({
+      success: false,
+      message: error.message,
+    });
+  }
 };
+
 
 /* =====================================================
    API-3: GET CURRENT USER

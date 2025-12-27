@@ -1,0 +1,95 @@
+.projects-page {
+  padding: 2.5rem 3rem;
+  max-width: 1400px;
+  margin: 0 auto;
+  color: #e8ecf1;
+}
+
+.projects-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 2rem;
+}
+
+.projects-toolbar {
+  display: flex;
+  gap: 1rem;
+  margin-bottom: 1.5rem;
+}
+
+.projects-toolbar input,
+.projects-toolbar select {
+  background: rgba(255,255,255,0.08);
+  border: 1px solid rgba(255,255,255,0.15);
+  color: #e8ecf1;
+  padding: 10px 14px;
+  border-radius: 10px;
+}
+
+.primary-btn {
+  background: linear-gradient(135deg, #6c8aff, #5be3c9);
+  border: none;
+  color: #000;
+  font-weight: 700;
+  padding: 10px 16px;
+  border-radius: 12px;
+  cursor: pointer;
+}
+
+.projects-table {
+  width: 100%;
+  border-collapse: collapse;
+  background: rgba(255,255,255,0.05);
+  border-radius: 14px;
+  overflow: hidden;
+}
+
+.projects-table th,
+.projects-table td {
+  padding: 14px;
+  border-bottom: 1px solid rgba(255,255,255,0.1);
+}
+
+.projects-table th {
+  background: rgba(255,255,255,0.08);
+  text-align: left;
+  font-size: 0.85rem;
+  text-transform: uppercase;
+}
+
+.actions button {
+  margin-right: 6px;
+}
+
+.actions .danger {
+  color: #ff6b6b;
+}
+
+.badge {
+  padding: 4px 10px;
+  border-radius: 999px;
+  font-size: 0.7rem;
+  text-transform: uppercase;
+  border: 1px solid;
+}
+
+.status-active {
+  color: #6c8aff;
+  border-color: #6c8aff;
+}
+
+.status-completed {
+  color: #51cf66;
+  border-color: #51cf66;
+}
+
+.status-archived {
+  color: #ffd43b;
+  border-color: #ffd43b;
+}
+
+.empty-state {
+  color: #aab4c2;
+  font-style: italic;
+}
