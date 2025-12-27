@@ -1,0 +1,204 @@
+:root {
+  --primary: #4f46e5;
+  --accent: #06b6d4;
+  --bg: #f9fafb;
+  --card-bg: #ffffff;
+  --text: #1f2937;
+  --text-muted: #6b7280;
+  --border: #e5e7eb;
+  --radius: 12px;
+  --shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+}
+
+body, html {
+  margin: 0;
+  padding: 0;
+  width: 100%;
+  background: var(--bg);
+  font-family: 'Inter', sans-serif;
+}
+
+.dashboard {
+  min-height: 100vh;
+  width: 100%;
+  padding: 2rem;
+}
+
+.dashboard-inner {
+  width: 100%; /* keeps it centered on very large screens */
+  margin: 0 auto;
+  min-height: 100vh;
+}
+
+h2 {
+  text-align: center;
+  font-size: 2rem;
+  font-weight: 700;
+  color: var(--primary);
+  margin-bottom: 2rem;
+}
+
+/* ===== STATS ===== */
+.stats-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 1.5rem;
+  margin-bottom: 2rem;
+}
+
+.stat-card {
+  background: var(--card-bg);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 1.5rem;
+  text-align: center;
+  box-shadow: var(--shadow);
+  transition: transform 0.3s ease;
+}
+
+.stat-card:hover {
+  transform: translateY(-5px);
+}
+
+.stat-card h4 {
+  font-size: 0.9rem;
+  text-transform: uppercase;
+  color: var(--text-muted);
+}
+
+.stat-card p {
+  font-size: 2rem;
+  font-weight: 600;
+  color: var(--primary);
+}
+
+/* ===== LISTS ===== */
+.lists-wrapper {
+  display: grid;
+  gap: 2rem;
+  width: 100%;
+}
+
+@media (min-width: 992px) {
+  .lists-wrapper {
+    grid-template-columns: 1fr 1fr;
+  }
+}
+
+section {
+  background: var(--card-bg);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 1.5rem;
+  box-shadow: var(--shadow);
+}
+
+h3 {
+  font-size: 1.25rem;
+  font-weight: 600;
+  color: var(--accent);
+  margin-bottom: 1rem;
+}
+
+.project-list,
+.task-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.project-list li,
+.task-list li {
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 1rem;
+  margin-bottom: 1rem;
+  background: var(--bg);
+  transition: background 0.3s ease;
+}
+
+.project-list li:hover,
+.task-list li:hover {
+  background: #e0f7fa;
+}
+
+.list-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.list-meta {
+  display: flex;
+  gap: 1rem;
+  flex-wrap: wrap;
+  font-size: 0.85rem;
+  color: var(--text-muted);
+}
+
+/* ===== BADGES ===== */
+.badge,
+.task-item-status {
+  padding: 4px 10px;
+  border-radius: 999px;
+  font-size: 0.75rem;
+  font-weight: 600;
+  text-transform: uppercase;
+}
+
+.status-active {
+  background: #eef2ff;
+  color: var(--primary);
+}
+
+.status-completed {
+  background: #e6fffa;
+  color: #059669;
+}
+
+.status-pending,
+.status-archived {
+  background: #fff7ed;
+  color: #d97706;
+}
+
+.status-in_progress {
+  background: #e0f2fe;
+  color: #0284c7;
+}
+
+.priority {
+  background: #f3f4f6;
+  padding: 3px 8px;
+  border-radius: 8px;
+  font-weight: 500;
+}
+
+select {
+  width: 100%;
+  padding: 0.5rem;
+  border-radius: var(--radius);
+  border: 1px solid var(--border);
+  background: var(--card-bg);
+  color: var(--text);
+  margin-bottom: 1rem;
+}
+
+.empty-state {
+  font-style: italic;
+  color: var(--text-muted);
+  text-align: center;
+}
+
+/* 📱 Responsive tweaks */
+@media (max-width: 768px) {
+  h2 {
+    font-size: 1.5rem;
+  }
+  .stat-card p {
+    font-size: 1.5rem;
+  }
+  section {
+    padding: 1rem;
+  }
+}
