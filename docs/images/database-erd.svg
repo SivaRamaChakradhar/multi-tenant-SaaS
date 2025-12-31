@@ -1,0 +1,53 @@
+<svg viewBox="0 0 1400 900" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <style>
+      .table-box { fill: #1a1a2e; stroke: #6c8aff; stroke-width: 2; }
+      .table-header { fill: #6c8aff; }
+      .text-table-name { font-size: 16px; font-weight: bold; fill: #fff; }
+      .text-column { font-size: 12px; fill: #b8c2d9; }
+      .title { font-size: 24px; font-weight: bold; fill: #e8ecf1; }
+    </style>
+  </defs>
+  <rect width="1400" height="900" fill="#0b0f1b"/>
+  <text x="700" y="35" text-anchor="middle" class="title">Database Entity Relationship Diagram (ERD)</text>
+  <rect x="50" y="80" width="260" height="220" rx="6" class="table-box"/>
+  <rect x="50" y="80" width="260" height="30" rx="6" class="table-header"/>
+  <text x="180" y="103" text-anchor="middle" class="text-table-name">TENANTS</text>
+  <text x="65" y="125" class="text-column">id (UUID) - PK</text>
+  <text x="65" y="145" class="text-column">name (VARCHAR)</text>
+  <text x="65" y="165" class="text-column">subdomain (VARCHAR)</text>
+  <text x="65" y="185" class="text-column">status (ENUM)</text>
+  <rect x="400" y="80" width="280" height="240" rx="6" class="table-box"/>
+  <rect x="400" y="80" width="280" height="30" rx="6" class="table-header"/>
+  <text x="540" y="103" text-anchor="middle" class="text-table-name">USERS</text>
+  <text x="415" y="125" class="text-column">id (UUID) - PK</text>
+  <text x="415" y="145" class="text-column">tenant_id (UUID) - FK</text>
+  <text x="415" y="165" class="text-column">email (VARCHAR)</text>
+  <text x="415" y="185" class="text-column">password_hash (VARCHAR)</text>
+  <text x="415" y="205" class="text-column">full_name (VARCHAR)</text>
+  <text x="415" y="225" class="text-column">role (ENUM)</text>
+  <rect x="800" y="80" width="280" height="240" rx="6" class="table-box"/>
+  <rect x="800" y="80" width="280" height="30" rx="6" class="table-header"/>
+  <text x="940" y="103" text-anchor="middle" class="text-table-name">PROJECTS</text>
+  <text x="815" y="125" class="text-column">id (UUID) - PK</text>
+  <text x="815" y="145" class="text-column">tenant_id (UUID) - FK</text>
+  <text x="815" y="165" class="text-column">created_by (UUID) - FK</text>
+  <text x="815" y="185" class="text-column">name (VARCHAR)</text>
+  <text x="815" y="205" class="text-column">description (TEXT)</text>
+  <rect x="1150" y="80" width="220" height="240" rx="6" class="table-box"/>
+  <rect x="1150" y="80" width="220" height="30" rx="6" class="table-header"/>
+  <text x="1260" y="103" text-anchor="middle" class="text-table-name">TASKS</text>
+  <text x="1165" y="125" class="text-column">id (UUID) - PK</text>
+  <text x="1165" y="145" class="text-column">tenant_id (UUID) - FK</text>
+  <text x="1165" y="165" class="text-column">project_id (UUID) - FK</text>
+  <text x="1165" y="185" class="text-column">title (VARCHAR)</text>
+  <text x="1165" y="205" class="text-column">priority (ENUM)</text>
+  <rect x="50" y="400" width="540" height="200" rx="6" class="table-box"/>
+  <rect x="50" y="400" width="540" height="30" rx="6" class="table-header"/>
+  <text x="320" y="423" text-anchor="middle" class="text-table-name">AUDIT_LOGS</text>
+  <text x="65" y="445" class="text-column">id (UUID) - PK</text>
+  <text x="65" y="465" class="text-column">tenant_id (UUID) - FK</text>
+  <text x="65" y="485" class="text-column">user_id (UUID) - FK</text>
+  <text x="65" y="505" class="text-column">action (VARCHAR)</text>
+  <text x="65" y="525" class="text-column">entity_type (VARCHAR)</text>
+</svg>

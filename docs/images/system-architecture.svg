@@ -1,0 +1,36 @@
+<svg viewBox="0 0 1200 800" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <style>
+      .box { fill: #1a1a2e; stroke: #6c8aff; stroke-width: 2; }
+      .text-title { font-size: 18px; font-weight: bold; fill: #e8ecf1; }
+      .text-subtitle { font-size: 14px; fill: #b8c2d9; }
+      .text-small { font-size: 12px; fill: #8a96b3; }
+      .arrow { stroke: #6c8aff; stroke-width: 2; fill: none; marker-end: url(#arrowhead); }
+      .label { font-size: 13px; fill: #6c8aff; font-weight: 500; }
+    </style>
+    <marker id="arrowhead" markerWidth="10" markerHeight="10" refX="9" refY="3" orient="auto">
+      <polygon points="0 0, 10 3, 0 6" fill="#6c8aff" />
+    </marker>
+  </defs>
+  <rect width="1200" height="800" fill="#0b0f1b"/>
+  <text x="600" y="40" text-anchor="middle" class="text-title" font-size="24">Multi-Tenant SaaS System Architecture</text>
+  <rect x="50" y="100" width="250" height="120" rx="8" class="box"/>
+  <text x="175" y="135" text-anchor="middle" class="text-title">Web Browser</text>
+  <text x="175" y="160" text-anchor="middle" class="text-subtitle">User Access</text>
+  <text x="175" y="185" text-anchor="middle" class="text-small">http://localhost:3000</text>
+  <rect x="50" y="270" width="250" height="180" rx="8" class="box"/>
+  <text x="175" y="305" text-anchor="middle" class="text-title">Frontend</text>
+  <text x="175" y="330" text-anchor="middle" class="text-subtitle">React 18 + Vite</text>
+  <text x="175" y="360" text-anchor="middle" class="text-small">Port: 3000</text>
+  <rect x="475" y="270" width="250" height="180" rx="8" class="box"/>
+  <text x="600" y="305" text-anchor="middle" class="text-title">Backend API</text>
+  <text x="600" y="330" text-anchor="middle" class="text-subtitle">Node.js + Express</text>
+  <text x="600" y="360" text-anchor="middle" class="text-small">Port: 5000</text>
+  <rect x="900" y="270" width="250" height="180" rx="8" class="box"/>
+  <text x="1025" y="305" text-anchor="middle" class="text-title">Database</text>
+  <text x="1025" y="330" text-anchor="middle" class="text-subtitle">PostgreSQL 15</text>
+  <text x="1025" y="360" text-anchor="middle" class="text-small">Port: 5432</text>
+  <path d="M 175 220 L 175 270" class="arrow"/>
+  <path d="M 300 360 L 475 360" class="arrow"/>
+  <path d="M 725 360 L 900 360" class="arrow"/>
+</svg>
