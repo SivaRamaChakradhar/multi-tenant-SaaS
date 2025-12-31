@@ -2,84 +2,82 @@
 .user-modal-overlay {
   position: fixed;
   inset: 0;
-  background: rgba(0, 0, 0, 0.55);
+  background: rgba(6, 10, 22, 0.75);
+  backdrop-filter: blur(10px);
   display: grid;
   place-items: center;
   z-index: 999;
 }
 
-/* Modal container */
 .user-modal {
   width: 100%;
-  max-width: 480px;
-
-  background: #ffffff;
+  max-width: 520px;
+  background: linear-gradient(145deg, rgba(23,29,50,0.95), rgba(12,16,30,0.92));
+  border: 1px solid rgba(255,255,255,0.08);
   border-radius: 18px;
-  padding: 22px 20px;
-
+  padding: 22px 22px 18px;
+  color: #e8ecf1;
+  box-shadow: 0 20px 60px rgba(0,0,0,0.35);
   display: flex;
   flex-direction: column;
-  gap: 12px;
-
-  box-shadow: 0 25px 40px rgba(0, 0, 0, 0.15);
+  gap: 14px;
 }
 
-/* Title */
 .user-modal h3 {
   margin: 0 0 6px;
   text-align: center;
   font-size: 1.3rem;
-  font-weight: 700;
+  font-weight: 800;
 }
 
-/* Inputs */
 .user-modal input,
 .user-modal select {
-  border: 1px solid #d8dce6;
-  border-radius: 10px;
-  padding: 10px 12px;
+  border: 1px solid rgba(255,255,255,0.12);
+  border-radius: 12px;
+  padding: 12px;
   font-size: 0.95rem;
   outline: none;
+  background: rgba(255,255,255,0.05);
+  color: #e8ecf1;
 }
 
 .user-modal input:focus,
 .user-modal select:focus {
-  border-color: #3f8cff;
-  box-shadow: 0 0 0 2px rgba(63, 140, 255, 0.15);
+  border-color: #6c8aff;
+  box-shadow: 0 0 0 2px rgba(108,138,255,0.18);
 }
 
-/* Checkbox row */
 .user-modal label {
   display: flex;
   gap: 8px;
   align-items: center;
-  font-size: 0.9rem;
-  color: #333;
+  font-size: 0.95rem;
+  color: #cfd6e6;
 }
 
-/* Buttons */
 .user-modal button {
-  padding: 10px 12px;
-  border-radius: 10px;
+  padding: 12px;
+  border-radius: 12px;
   border: none;
   cursor: pointer;
-  font-weight: 600;
+  font-weight: 700;
+  letter-spacing: 0.2px;
 }
 
 .user-modal button:first-of-type {
-  background: #3f8cff;
-  color: white;
+  background: linear-gradient(135deg, #6c8aff, #5be3c9);
+  color: #0b0f1b;
 }
 
 .user-modal button:last-of-type {
-  background: #f3f4f8;
+  background: rgba(255,255,255,0.07);
+  color: #e8ecf1;
+  border: 1px solid rgba(255,255,255,0.12);
 }
 
-/* Responsive */
-@media (max-width: 520px) {
+@media (max-width: 560px) {
   .user-modal {
-    max-width: 95%;
-    padding: 18px 14px;
-    border-radius: 14px;
+    max-width: 94%;
+    padding: 18px;
   }
 }
