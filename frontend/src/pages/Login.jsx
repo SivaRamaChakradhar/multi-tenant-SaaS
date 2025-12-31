@@ -1,4 +1,4 @@
-import { useContext, useState } from "react";
+import { useContext, useState, useEffect } from "react";
 import { AuthContext } from "../context/AuthContext";
 import axiosClient from "../api/axiosClient";
 import { Link, useNavigate } from "react-router-dom";
@@ -6,7 +6,14 @@ import './Login.css';
 
 export default function Login() {
   const navigate = useNavigate();
-  const { login } = useContext(AuthContext);
+  const { user, login } = useContext(AuthContext);
+
+  // Redirect if already logged in
+  useEffect(() => {
+    if (user) {
+      navigate("/dashboard");
+    }
+  }, [user, navigate]);
 
   const [form, setForm] = useState({
     email: "",
@@ -33,46 +40,18 @@ export default function Login() {
         payload.tenantSubdomain = form.tenantSubdomain.trim();
       }
 
-      console.log('Sending login request with payload:', payload);
       const res = await axiosClient.post("/auth/login", payload);
-      console.log('Full login response:', JSON.stringify(res.data, null, 2));
-      console.log('Response structure check:', {
-        hasData: !!res.data,
-        hasDataData: !!res.data?.data,
-        hasToken: !!res.data?.data?.token,
-        hasUser: !!res.data?.data?.user
-      });
 
       if (res.data && res.data.data) {
         const token = res.data.data.token;
         const user = res.data.data.user;
         
-        console.log('Token extracted:', token);
-        console.log('User extracted:', user);
-        
-        try {
-          console.log('About to call login function...');
-          login({ user, token });
-          console.log('Login function called successfully');
-        } catch (loginErr) {
-          console.error('Error calling login function:', loginErr);
-          throw loginErr;
-        }
-        
-        try {
-          console.log('Navigating to dashboard...');
-          navigate("/dashboard");
-          console.log('Navigate called successfully');
-        } catch (navErr) {
-          console.error('Error navigating:', navErr);
-          throw navErr;
-        }
+        login({ user, token });
+        navigate("/dashboard");
       } else {
-        console.error('Response structure invalid:', res.data);
         throw new Error('Invalid response structure');
       }
     } catch (err) {
-      console.error('Login error:', err);
       setError(err.response?.data?.message || err.message || "Login failed. Please check your credentials.");
     } finally {
       setLoading(false);

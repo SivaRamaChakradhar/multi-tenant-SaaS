@@ -1,10 +1,20 @@
-import { useState } from "react";
+import { useState, useContext, useEffect } from "react";
 import axiosClient from "../api/axiosClient";
 import { Link, useNavigate } from "react-router-dom";
+import { AuthContext } from "../context/AuthContext";
 import './Register.css';
 
 export default function Register() {
   const navigate = useNavigate();
+  const { user } = useContext(AuthContext);
+
+  // Redirect if already logged in
+  useEffect(() => {
+    if (user) {
+      navigate("/dashboard");
+    }
+  }, [user, navigate]);
+
   const [form, setForm] = useState({
     organizationName: "",
     subdomain: "",
