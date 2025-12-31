@@ -1,5 +1,4 @@
 const pool = require("../config/db");
-const bcrypt = require("bcrypt");
 
 async function runSeeds() {
   console.log("🌱 Running seed data...");
@@ -10,6 +9,12 @@ async function runSeeds() {
     console.log("⚠️ Seed data already exists, skipping");
     return;
   }
+
+  // Pre-hashed passwords using bcrypt with 10 rounds
+  // These are hashes for: Admin@123, Demo@123, User@123
+  const superHash = "$2b$10$TLTTkmQ4NMuKY2CZFF8ANe1QbepxyThFbPKdZTG0FTASj3aEWKfRW";
+  const adminHash = "$2b$10$ZXQLkfm2cn8PMwQR6dEgPOE33trd5LfGtw6P4VdjtrsrAazIEZVsS";
+  const userHash = "$2b$10$pScK3COrOphGclHsD5cA0ej86GNlawHKJMBo2hrIEDR6YbEpH1CFm";
 
   // 1️⃣ Create tenant
   const tenant = await pool.query(
@@ -23,7 +28,6 @@ async function runSeeds() {
   const tenantId = tenant.rows[0].id;
 
   // 2️⃣ Create super admin (tenant_id = NULL)
-  const superHash = await bcrypt.hash("Admin@123", 10);
   await pool.query(
     `
     INSERT INTO users (email, password_hash, full_name, role)
@@ -33,7 +37,6 @@ async function runSeeds() {
   );
 
   // 3️⃣ Tenant admin
-  const adminHash = await bcrypt.hash("Demo@123", 10);
   const admin = await pool.query(
     `
     INSERT INTO users (tenant_id, email, password_hash, full_name, role)
@@ -44,7 +47,6 @@ async function runSeeds() {
   );
 
   // 4️⃣ Regular user
-  const userHash = await bcrypt.hash("User@123", 10);
   await pool.query(
     `
     INSERT INTO users (tenant_id, email, password_hash, full_name, role)

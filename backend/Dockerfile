@@ -9,8 +9,11 @@ RUN npm install
 # Copy application source
 COPY src ./src
 
-# ✅ COPY MIGRATIONS FROM src
-COPY src/migrations ./migrations
+# Copy seeds directory
+COPY seeds ./seeds
+
+# Install wget for healthcheck
+RUN apt-get update && apt-get install -y wget && rm -rf /var/lib/apt/lists/*
 
 EXPOSE 5000
 

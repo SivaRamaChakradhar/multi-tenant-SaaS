@@ -3,7 +3,8 @@ const path = require("path");
 const pool = require("../config/db");
 
 async function runMigrations() {
-  const migrationsDir = path.join(__dirname, "../../migrations");
+  // Migrations are in src/migrations
+  const migrationsDir = path.join(__dirname, "../migrations");
 
   const files = fs
     .readdirSync(migrationsDir)

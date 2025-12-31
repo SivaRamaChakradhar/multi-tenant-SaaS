@@ -1,92 +1,82 @@
-/* Dark overlay behind the modal */
-.modal::backdrop {
-  background: rgba(0, 0, 0, 0.55);
+/* Glassy modal overlay */
+.modal-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(6, 10, 22, 0.75);
+  backdrop-filter: blur(10px);
+  display: grid;
+  place-items: center;
+  z-index: 999;
 }
 
-/* Wrap modal content */
 .modal {
-  position: fixed;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  z-index: 1000;
-
   width: 100%;
-  max-width: 460px;
-
-  background: #ffffff;
+  max-width: 520px;
+  background: linear-gradient(145deg, rgba(23,29,50,0.95), rgba(12,16,30,0.92));
+  border: 1px solid rgba(255,255,255,0.08);
   border-radius: 18px;
-  padding: 22px 20px;
-
+  padding: 22px 22px 18px;
+  color: #e8ecf1;
+  box-shadow: 0 20px 60px rgba(0,0,0,0.35);
   display: flex;
   flex-direction: column;
-  gap: 12px;
-
-  box-shadow: 0 25px 40px rgba(0, 0, 0, 0.15);
+  gap: 14px;
 }
 
-/* Title */
 .modal h3 {
   margin: 0 0 4px;
   text-align: center;
   font-size: 1.3rem;
+  letter-spacing: 0.2px;
 }
 
-/* Inputs */
 .modal input,
 .modal textarea,
 .modal select {
-  border: 1px solid #d8dce6;
-  border-radius: 10px;
-  padding: 10px 12px;
+  border: 1px solid rgba(255,255,255,0.12);
+  border-radius: 12px;
+  padding: 12px 12px;
   font-size: 0.95rem;
   outline: none;
+  background: rgba(255,255,255,0.04);
+  color: #e8ecf1;
 }
 
 .modal input:focus,
 .modal textarea:focus,
 .modal select:focus {
-  border-color: #3f8cff;
-  box-shadow: 0 0 0 2px rgba(63, 140, 255, 0.15);
+  border-color: #6c8aff;
+  box-shadow: 0 0 0 2px rgba(108,138,255,0.18);
 }
 
 .modal textarea {
-  min-height: 90px;
+  min-height: 110px;
   resize: vertical;
 }
 
-/* Buttons row */
 .modal button {
-  padding: 10px 12px;
-  border-radius: 10px;
+  padding: 12px;
+  border-radius: 12px;
   border: none;
   cursor: pointer;
-  font-weight: 600;
+  font-weight: 700;
+  letter-spacing: 0.2px;
 }
 
 .modal button:first-of-type {
-  background: #3f8cff;
-  color: white;
+  background: linear-gradient(135deg, #6c8aff, #5be3c9);
+  color: #0b0f1b;
 }
 
 .modal button:last-of-type {
-  background: #f3f4f8;
+  background: rgba(255,255,255,0.06);
+  color: #e8ecf1;
+  border: 1px solid rgba(255,255,255,0.12);
 }
 
-/* Responsive */
-@media (max-width: 520px) {
+@media (max-width: 560px) {
   .modal {
-    max-width: 95%;
-    padding: 18px 14px;
-    border-radius: 14px;
+    max-width: 94%;
+    padding: 18px;
   }
-}
-
-.modal-overlay {
-  position: fixed;
-  inset: 0;
-  background: rgba(0, 0, 0, 0.55);
-  display: grid;
-  place-items: center;
-  z-index: 999;
 }

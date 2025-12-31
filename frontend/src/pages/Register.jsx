@@ -1,8 +1,7 @@
 import { useState } from "react";
 import axiosClient from "../api/axiosClient";
 import { Link, useNavigate } from "react-router-dom";
-
-import './Register.css'
+import './Register.css';
 
 export default function Register() {
   const navigate = useNavigate();
@@ -31,7 +30,10 @@ export default function Register() {
     if (form.password !== form.confirmPassword)
       return setError("Passwords do not match");
 
-    if (!form.terms) return setError("Accept terms & conditions");
+    if (!form.terms) return setError("Please accept terms & conditions");
+
+    if (form.password.length < 8)
+      return setError("Password must be at least 8 characters");
 
     try {
       setLoading(true);
@@ -51,26 +53,119 @@ export default function Register() {
   };
 
   return (
-    <form onSubmit={submit}>
-      <h2>Register Tenant</h2>
+    <div className="register-container">
+      <div className="register-card">
+        <h2>Create Your Workspace</h2>
+        <p className="subtitle">Start managing your projects in minutes</p>
+        
+        <form className="register-form" onSubmit={submit}>
+          <div className="form-group">
+            <label htmlFor="organizationName">Organization Name *</label>
+            <input
+              id="organizationName"
+              name="organizationName"
+              type="text"
+              placeholder="e.g., Acme Corporation"
+              value={form.organizationName}
+              onChange={handleChange}
+              required
+            />
+          </div>
 
-      <input name="organizationName" placeholder="Organization Name" onChange={handleChange} />
-      <input name="subdomain" placeholder="Subdomain" onChange={handleChange} />
-      <input name="adminEmail" placeholder="Admin Email" onChange={handleChange} />
-      <input name="adminFullName" placeholder="Admin Full Name" onChange={handleChange} />
-      <input type="password" name="password" placeholder="Password" onChange={handleChange} />
-      <input type="password" name="confirmPassword" placeholder="Confirm Password" onChange={handleChange} />
+          <div className="form-group">
+            <label htmlFor="subdomain">Subdomain *</label>
+            <input
+              id="subdomain"
+              name="subdomain"
+              type="text"
+              placeholder="e.g., acme"
+              value={form.subdomain}
+              onChange={handleChange}
+              required
+            />
+            {form.subdomain && (
+              <div className="subdomain-preview">
+                Your workspace: {form.subdomain}.yourapp.com
+              </div>
+            )}
+          </div>
 
-      <label>
-        <input type="checkbox" name="terms" onChange={handleChange} /> Accept Terms
-      </label>
+          <div className="form-group">
+            <label htmlFor="adminFullName">Your Full Name *</label>
+            <input
+              id="adminFullName"
+              name="adminFullName"
+              type="text"
+              placeholder="e.g., John Doe"
+              value={form.adminFullName}
+              onChange={handleChange}
+              required
+            />
+          </div>
 
-      {error && <p className="error">{error}</p>}
+          <div className="form-group">
+            <label htmlFor="adminEmail">Email Address *</label>
+            <input
+              id="adminEmail"
+              name="adminEmail"
+              type="email"
+              placeholder="e.g., john@acme.com"
+              value={form.adminEmail}
+              onChange={handleChange}
+              required
+            />
+          </div>
 
+          <div className="form-group">
+            <label htmlFor="password">Password *</label>
+            <input
+              id="password"
+              name="password"
+              type="password"
+              placeholder="Minimum 8 characters"
+              value={form.password}
+              onChange={handleChange}
+              required
+            />
+          </div>
 
-      <button disabled={loading}>{loading ? "Registering..." : "Register"}</button>
+          <div className="form-group">
+            <label htmlFor="confirmPassword">Confirm Password *</label>
+            <input
+              id="confirmPassword"
+              name="confirmPassword"
+              type="password"
+              placeholder="Re-enter your password"
+              value={form.confirmPassword}
+              onChange={handleChange}
+              required
+            />
+          </div>
 
-      <p>Already have an account? <Link to="/login">Login</Link></p>
-    </form>
+          <div className="checkbox-group">
+            <input
+              id="terms"
+              type="checkbox"
+              name="terms"
+              checked={form.terms}
+              onChange={handleChange}
+            />
+            <label htmlFor="terms">
+              I agree to the Terms of Service and Privacy Policy
+            </label>
+          </div>
+
+          {error && <div className="error-message">{error}</div>}
+
+          <button className="btn-primary" type="submit" disabled={loading}>
+            {loading ? "Creating Workspace..." : "Create Workspace"}
+          </button>
+
+          <p className="login-link">
+            Already have an account? <Link to="/login">Sign In</Link>
+          </p>
+        </form>
+      </div>
+    </div>
   );
 }

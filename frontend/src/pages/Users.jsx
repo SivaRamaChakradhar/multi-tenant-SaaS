@@ -112,6 +112,7 @@ export default function Users() {
 
       {showModal && (
         <UserModal
+          tenantId={user?.tenant?.id}
           user={editingUser}
           onClose={() => {
             setShowModal(false);
