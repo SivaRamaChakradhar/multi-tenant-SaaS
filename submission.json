@@ -1,10 +1,42 @@
 {
+  "projectInfo": {
+    "name": "Multi-Tenant SaaS Project Management Platform",
+    "description": "A production-ready multi-tenant SaaS application with project and task management, role-based access control, and strict tenant data isolation",
+    "repositoryUrl": "https://github.com/yourusername/multi-tenant-saas",
+    "dockerized": true,
+    "automaticMigrations": true,
+    "automaticSeeding": true
+  },
+  "dockerConfiguration": {
+    "composeFile": "docker-compose.yml",
+    "services": {
+      "database": {
+        "name": "database",
+        "port": 5432,
+        "image": "postgres:15"
+      },
+      "backend": {
+        "name": "backend",
+        "port": 5000,
+        "healthCheck": "/api/health"
+      },
+      "frontend": {
+        "name": "frontend",
+        "port": 3000
+      }
+    },
+    "startupCommand": "docker-compose up -d",
+    "migrationsAutoRun": true,
+    "seedDataAutoLoad": true
+  },
   "testCredentials": {
     "superAdmin": {
       "email": "superadmin@system.com",
       "password": "Admin@123",
+      "fullName": "System Admin",
       "role": "super_admin",
-      "tenantId": null
+      "tenantId": null,
+      "description": "System-wide administrator with access to all tenants"
     },
     "tenants": [
       {
@@ -12,25 +44,258 @@
         "subdomain": "demo",
         "status": "active",
         "subscriptionPlan": "pro",
+        "maxUsers": 25,
+        "maxProjects": 15,
         "admin": {
           "email": "admin@demo.com",
           "password": "Demo@123",
-          "role": "tenant_admin"
+          "fullName": "Demo Admin",
+          "role": "tenant_admin",
+          "description": "Tenant administrator for Demo Company with full tenant management access"
         },
         "users": [
           {
             "email": "user1@demo.com",
             "password": "User@123",
-            "role": "user"
+            "fullName": "Demo User One",
+            "role": "user",
+            "isActive": true,
+            "description": "Regular user with access to assigned projects and tasks"
+          },
+          {
+            "email": "user2@demo.com",
+            "password": "User@123",
+            "fullName": "Demo User Two",
+            "role": "user",
+            "isActive": true,
+            "description": "Regular user with access to assigned projects and tasks"
           }
         ],
         "projects": [
           {
             "name": "Project Alpha",
-            "description": "First demo project"
+            "description": "First demo project",
+            "status": "active",
+            "createdBy": "admin@demo.com"
+          },
+          {
+            "name": "Project Beta",
+            "description": "Second demo project",
+            "status": "active",
+            "createdBy": "admin@demo.com"
+          }
+        ],
+        "tasks": [
+          {
+            "title": "Design UI",
+            "description": "Design user interface mockups",
+            "priority": "high",
+            "status": "pending",
+            "assignedTo": "user1@demo.com",
+            "project": "Project Alpha"
+          },
+          {
+            "title": "Create API",
+            "description": "Develop RESTful API endpoints",
+            "priority": "medium",
+            "status": "pending",
+            "assignedTo": "user2@demo.com",
+            "project": "Project Alpha"
+          },
+          {
+            "title": "Write Docs",
+            "description": "Write technical documentation",
+            "priority": "low",
+            "status": "pending",
+            "assignedTo": "user1@demo.com",
+            "project": "Project Beta"
           }
         ]
       }
     ]
+  },
+  "apiEndpoints": {
+    "authentication": [
+      {
+        "method": "POST",
+        "path": "/api/auth/register-tenant",
+        "description": "Register new tenant with admin user",
+        "authentication": false
+      },
+      {
+        "method": "POST",
+        "path": "/api/auth/login",
+        "description": "User login with email and password",
+        "authentication": false
+      },
+      {
+        "method": "GET",
+        "path": "/api/auth/me",
+        "description": "Get current authenticated user details",
+        "authentication": true
+      },
+      {
+        "method": "POST",
+        "path": "/api/auth/logout",
+        "description": "User logout",
+        "authentication": true
+      }
+    ],
+    "tenants": [
+      {
+        "method": "GET",
+        "path": "/api/tenants/:tenantId",
+        "description": "Get tenant details",
+        "authentication": true,
+        "authorization": ["tenant_admin", "super_admin"]
+      },
+      {
+        "method": "PUT",
+        "path": "/api/tenants/:tenantId",
+        "description": "Update tenant information",
+        "authentication": true,
+        "authorization": ["tenant_admin", "super_admin"]
+      },
+      {
+        "method": "GET",
+        "path": "/api/tenants",
+        "description": "List all tenants",
+        "authentication": true,
+        "authorization": ["super_admin"]
+      }
+    ],
+    "users": [
+      {
+        "method": "POST",
+        "path": "/api/tenants/:tenantId/users",
+        "description": "Add new user to tenant",
+        "authentication": true,
+        "authorization": ["tenant_admin"]
+      },
+      {
+        "method": "GET",
+        "path": "/api/tenants/:tenantId/users",
+        "description": "List all users in tenant",
+        "authentication": true,
+        "authorization": ["tenant_admin", "user"]
+      },
+      {
+        "method": "PUT",
+        "path": "/api/users/:userId",
+        "description": "Update user information",
+        "authentication": true,
+        "authorization": ["tenant_admin"]
+      },
+      {
+        "method": "DELETE",
+        "path": "/api/users/:userId",
+        "description": "Delete user from tenant",
+        "authentication": true,
+        "authorization": ["tenant_admin"]
+      }
+    ],
+    "projects": [
+      {
+        "method": "POST",
+        "path": "/api/projects",
+        "description": "Create new project",
+        "authentication": true,
+        "authorization": ["tenant_admin", "user"]
+      },
+      {
+        "method": "GET",
+        "path": "/api/projects",
+        "description": "List all projects (tenant-scoped)",
+        "authentication": true,
+        "authorization": ["tenant_admin", "user"]
+      },
+      {
+        "method": "GET",
+        "path": "/api/projects/:id",
+        "description": "Get project details with tasks",
+        "authentication": true,
+        "authorization": ["tenant_admin", "user"]
+      },
+      {
+        "method": "PUT",
+        "path": "/api/projects/:projectId",
+        "description": "Update project information",
+        "authentication": true,
+        "authorization": ["tenant_admin", "user"]
+      },
+      {
+        "method": "DELETE",
+        "path": "/api/projects/:projectId",
+        "description": "Delete project",
+        "authentication": true,
+        "authorization": ["tenant_admin", "user"]
+      }
+    ],
+    "tasks": [
+      {
+        "method": "POST",
+        "path": "/api/projects/:projectId/tasks",
+        "description": "Create new task in project",
+        "authentication": true,
+        "authorization": ["tenant_admin", "user"]
+      },
+      {
+        "method": "GET",
+        "path": "/api/projects/:projectId/tasks",
+        "description": "List all tasks in project",
+        "authentication": true,
+        "authorization": ["tenant_admin", "user"]
+      },
+      {
+        "method": "PATCH",
+        "path": "/api/tasks/:taskId/status",
+        "description": "Update task status",
+        "authentication": true,
+        "authorization": ["tenant_admin", "user"]
+      },
+      {
+        "method": "PUT",
+        "path": "/api/tasks/:taskId",
+        "description": "Update task details",
+        "authentication": true,
+        "authorization": ["tenant_admin", "user"]
+      }
+    ],
+    "health": [
+      {
+        "method": "GET",
+        "path": "/api/health",
+        "description": "Service health check endpoint",
+        "authentication": false
+      }
+    ]
+  },
+  "testing": {
+    "healthCheckUrl": "http://localhost:5000/api/health",
+    "frontendUrl": "http://localhost:3000",
+    "backendUrl": "http://localhost:5000",
+    "databasePort": 5432,
+    "testSequence": [
+      "docker-compose up -d",
+      "Wait for health check to return 200 OK",
+      "Login with admin@demo.com",
+      "Verify tenant isolation",
+      "Test project creation",
+      "Test task management",
+      "Test user management"
+    ]
+  },
+  "features": {
+    "multiTenancy": true,
+    "tenantIsolation": "database-level with tenant_id",
+    "authentication": "JWT-based",
+    "authorization": "Role-based access control (RBAC)",
+    "auditLogging": true,
+    "passwordHashing": "bcrypt",
+    "healthCheck": true,
+    "automaticMigrations": true,
+    "automaticSeeding": true,
+    "responsiveUI": true,
+    "dockerized": true
   }
 }
