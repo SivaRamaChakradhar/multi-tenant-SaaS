@@ -1,8 +1,14 @@
 .project-details-page {
-  padding: 2.5rem 3rem;
+  padding: 1.5rem;
   max-width: 1400px;
   margin: 0 auto;
-  color: #e8ecf1;
+  color: var(--text);
+}
+
+@media (min-width: 768px) {
+  .project-details-page {
+    padding: 2.5rem 3rem;
+  }
 }
 
 /* HEADER */
@@ -25,7 +31,7 @@
 
 .project-header .description {
   margin-top: 0.4rem;
-  color: #aab4c2;
+  color: var(--muted);
 }
 
 /* STATUS BADGE */
@@ -39,18 +45,18 @@
 }
 
 .status-active {
-  color: #6c8aff;
-  border-color: #6c8aff;
+  color: var(--brand);
+  border-color: var(--brand);
 }
 
 .status-completed {
-  color: #51cf66;
-  border-color: #51cf66;
+  color: #22c55e;
+  border-color: #22c55e;
 }
 
 .status-archived {
-  color: #ffd43b;
-  border-color: #ffd43b;
+  color: #f59e0b;
+  border-color: #f59e0b;
 }
 
 /* TASKS */
@@ -80,7 +86,7 @@
   text-align: left;
   font-size: 0.8rem;
   text-transform: uppercase;
-  color: #aab4c2;
+  color: var(--muted);
 }
 
 /* BADGES */
@@ -130,7 +136,7 @@
 
 /* STATES */
 .empty-state {
-  color: #aab4c2;
+  color: var(--muted);
   font-style: italic;
 }
 

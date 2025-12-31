@@ -1,8 +1,14 @@
 .projects-page {
-  padding: 2.5rem 3rem;
+  padding: 1.5rem;
   max-width: 1400px;
   margin: 0 auto;
-  color: #e8ecf1;
+  color: var(--text);
+}
+
+@media (min-width: 768px) {
+  .projects-page {
+    padding: 2.5rem 3rem;
+  }
 }
 
 .projects-header {
@@ -16,6 +22,13 @@
   display: flex;
   gap: 1rem;
   margin-bottom: 1.5rem;
+  flex-wrap: wrap;
+}
+
+.projects-toolbar input,
+.projects-toolbar select {
+  flex: 1;
+  min-width: 150px;
 }
 
 .projects-toolbar input,

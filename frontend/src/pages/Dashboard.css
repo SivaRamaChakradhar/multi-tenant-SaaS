@@ -1,23 +1,10 @@
-:root {
-  --bg: #0f1220;
-  --card: rgba(255,255,255,.08);
-  --border: rgba(255,255,255,.12);
-  --text: #e8ecf1;
-  --muted: #aab4c2;
-  --brand: #6c8aff;
-  --success: #22c55e;
-  --warning: #facc15;
-  --danger: #ef4444;
-}
+/* Use global theme variables from index.css */
 
 /* ROOT */
 .dashboard-root {
   min-height: 100vh;
   padding: 24px;
-  background:
-    radial-gradient(1200px circle at 10% -10%, rgba(108,138,255,.15), transparent 40%),
-    radial-gradient(800px circle at 100% 0%, rgba(91,227,201,.12), transparent 40%),
-    var(--bg);
+  background: transparent;
   color: var(--text);
 }
 
