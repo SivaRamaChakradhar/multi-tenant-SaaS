@@ -1,10 +1,12 @@
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import axiosClient from "../api/axiosClient";
 import ProjectModal from "../components/ProjectModal";
 import { useNavigate } from "react-router-dom";
+import { AuthContext } from "../context/AuthContext";
 import "./Projects.css";
 
 export default function Projects() {
+  const { user } = useContext(AuthContext);
   const navigate = useNavigate();
 
   const [projects, setProjects] = useState([]);
@@ -47,9 +49,11 @@ export default function Projects() {
       <div className="projects-header">
         <h2>Projects</h2>
 
-        <button className="primary-btn" onClick={() => setShowModal(true)}>
-          + New Project
-        </button>
+        {user?.role !== 'super_admin' && (
+          <button className="primary-btn" onClick={() => setShowModal(true)}>
+            + New Project
+          </button>
+        )}
       </div>
 
       <div className="projects-toolbar">
