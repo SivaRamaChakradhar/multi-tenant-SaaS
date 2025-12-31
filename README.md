@@ -169,7 +169,7 @@ That's it! No need to install Node.js, PostgreSQL, or any other dependencies.
 
 **1. Clone the repository:**
 ```bash
-git clone <your-repo-url>
+git clone [<your-repo-url>](https://github.com/SivaRamaChakradhar/multi-tenant-SaaS)
 cd multi-tenant-saas
 ```
 
