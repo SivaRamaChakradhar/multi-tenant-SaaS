@@ -1,5 +1,6 @@
-import { useState } from "react";
+import { useContext, useState } from "react";
 import axiosClient from "../api/axiosClient";
+import { AuthContext } from "../context/AuthContext";
 import "./UserModal.css";
 
 export default function UserModal({
@@ -8,19 +9,22 @@ export default function UserModal({
   onClose,
   onSaved,
 }) {
-  const [form, setForm] = useState({
-    full_name: user?.full_name || "",
-    email: user?.email || "",
-    password: "",
-    role: user?.role || "user",
-    is_active: user?.is_active ?? true,
-  });
+    const { user: currentUser } = useContext(AuthContext);
+
+    const [form, setForm] = useState({
+      fullName: user?.full_name || "",
+      email: user?.email || "",
+      password: "",
+      role: user?.role || "user",
+      isActive: user?.is_active ?? true,
+    });
 
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
 
   // 🛡️ Safety guard
-  if (!tenantId) return null;
+    const resolvedTenantId = tenantId || currentUser?.tenant?.id;
+    if (!resolvedTenantId) return null;
 
   const submit = async (e) => {
     e.preventDefault();
@@ -31,13 +35,19 @@ export default function UserModal({
 
       if (user) {
         // UPDATE
-        await axiosClient.put(`/users/${user.id}`, form);
+          await axiosClient.put(`/users/${user.id}`, {
+            fullName: form.fullName,
+            role: form.role,
+            isActive: form.isActive,
+          });
       } else {
         // CREATE
-        await axiosClient.post(
-          `/tenants/${tenantId}/users`,
-          form
-        );
+          await axiosClient.post(`/tenants/${resolvedTenantId}/users`, {
+            fullName: form.fullName,
+            email: form.email,
+            password: form.password,
+            role: form.role,
+          });
       }
 
       onSaved();
@@ -52,79 +62,93 @@ export default function UserModal({
   };
 
   return (
-    <div className="modal-overlay">
-      <div className="modal">
-        <h3>{user ? "Edit User" : "Add User"}</h3>
+    <div className="user-modal-overlay">
+      <div className="user-modal">
+        <h3>{user ? "Edit User" : "Add New User"}</h3>
 
-        {error && <p className="error">{error}</p>}
+        {error && <p style={{ color: '#ff6b6b', fontSize: '0.9rem', margin: '0 0 8px', textAlign: 'center' }}>{error}</p>}
 
-        <form onSubmit={submit}>
-          <input
-            type="text"
-            placeholder="Full Name"
-            value={form.full_name}
-            onChange={(e) =>
-              setForm({ ...form, full_name: e.target.value })
-            }
-            required
-          />
-
-          <input
-            type="email"
-            placeholder="Email"
-            value={form.email}
-            onChange={(e) =>
-              setForm({ ...form, email: e.target.value })
-            }
-            required
-          />
-
-          {!user && (
+        <form onSubmit={submit} style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
+          <div>
+            <label style={{ display: 'block', fontSize: '0.85rem', marginBottom: '4px', color: '#b8c2d9' }}>Full Name</label>
             <input
-              type="password"
-              placeholder="Password"
-              value={form.password}
+              type="text"
+              placeholder="John Doe"
+              value={form.fullName}
               onChange={(e) =>
-                setForm({ ...form, password: e.target.value })
+                setForm({ ...form, fullName: e.target.value })
               }
               required
             />
+          </div>
+
+          <div>
+            <label style={{ display: 'block', fontSize: '0.85rem', marginBottom: '4px', color: '#b8c2d9' }}>Email Address</label>
+            <input
+              type="email"
+              placeholder="user@example.com"
+              value={form.email}
+              onChange={(e) =>
+                setForm({ ...form, email: e.target.value })
+              }
+              disabled={!!user}
+              required
+            />
+          </div>
+
+          {!user && (
+            <div>
+              <label style={{ display: 'block', fontSize: '0.85rem', marginBottom: '4px', color: '#b8c2d9' }}>Password</label>
+              <input
+                type="password"
+                placeholder="Minimum 8 characters"
+                value={form.password}
+                onChange={(e) =>
+                  setForm({ ...form, password: e.target.value })
+                }
+                required
+              />
+            </div>
           )}
 
-          <select
-            value={form.role}
-            onChange={(e) =>
-              setForm({ ...form, role: e.target.value })
-            }
-          >
-            <option value="user">User</option>
-            <option value="tenant_admin">Tenant Admin</option>
-          </select>
+          <div>
+            <label style={{ display: 'block', fontSize: '0.85rem', marginBottom: '4px', color: '#b8c2d9' }}>Role</label>
+            <select
+              value={form.role}
+              onChange={(e) =>
+                setForm({ ...form, role: e.target.value })
+              }
+            >
+              <option value="user">User</option>
+              <option value="tenant_admin">Tenant Admin</option>
+            </select>
+          </div>
 
-          <label className="checkbox">
+          <label style={{ display: 'flex', gap: '8px', alignItems: 'center', marginTop: '4px' }}>
             <input
               type="checkbox"
-              checked={form.is_active}
+              checked={form.isActive}
               onChange={(e) =>
                 setForm({
                   ...form,
-                  is_active: e.target.checked,
+                  isActive: e.target.checked,
                 })
               }
+              style={{ width: '18px', height: '18px', cursor: 'pointer' }}
             />
-            Active
+            <span style={{ fontSize: '0.95rem' }}>Active User</span>
           </label>
 
-          <div className="modal-actions">
+          <div style={{ display: 'flex', gap: '10px', marginTop: '8px' }}>
+            <button type="submit" disabled={loading} style={{ flex: 1 }}>
+              {loading ? "Saving..." : user ? "Update" : "Create"}
+            </button>
             <button
               type="button"
-              className="secondary"
               onClick={onClose}
+              style={{ flex: 1 }}
             >
               Cancel
-            </button>
-            <button type="submit" disabled={loading}>
-              {loading ? "Saving..." : "Save"}
             </button>
           </div>
         </form>
