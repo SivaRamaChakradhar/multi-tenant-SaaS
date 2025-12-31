@@ -435,33 +435,53 @@ multi-tenant-saas/
 │           └── runSeeds.js
 ├── frontend/
 │   ├── Dockerfile
+│   ├── eslint.config.js
+│   ├── index.html
 │   ├── package.json
 │   ├── vite.config.js
+│   ├── public/
 │   └── src/
+│       ├── App.css
 │       ├── App.jsx
+│       ├── index.css
 │       ├── main.jsx
 │       ├── api/
 │       │   └── axiosClient.js
+│       ├── assets/
 │       ├── components/
+│       │   ├── HomeRedirect.jsx
+│       │   ├── Navbar.css
 │       │   ├── Navbar.jsx
+│       │   ├── ProjectModal.css
 │       │   ├── ProjectModal.jsx
-│       │   ├── UserModal.jsx
 │       │   ├── ProtectedRoute.jsx
-│       │   └── HomeRedirect.jsx
+│       │   ├── TaskModal.css
+│       │   ├── TaskModal.jsx
+│       │   ├── UserModal.css
+│       │   └── UserModal.jsx
 │       ├── context/
 │       │   └── AuthContext.jsx
 │       └── pages/
-│           ├── Login.jsx
-│           ├── Register.jsx
+│           ├── Dashboard.css
 │           ├── Dashboard.jsx
-│           ├── Projects.jsx
+│           ├── Login.css
+│           ├── Login.jsx
+│           ├── ProjectDetails.css
 │           ├── ProjectDetails.jsx
+│           ├── Projects.css
+│           ├── Projects.jsx
+│           ├── Register.css
+│           ├── Register.jsx
+│           ├── Users.css
 │           └── Users.jsx
 ├── docs/
 │   ├── architecture.md
 │   ├── PRD.md
 │   ├── research.md
-│   └── technical-spec.md
+│   ├── technical-spec.md
+│   └── images/
+│       ├── database-erd.svg
+│       └── system-architecture.svg
 ├── docker-compose.yml
 ├── submission.json
 └── README.md
