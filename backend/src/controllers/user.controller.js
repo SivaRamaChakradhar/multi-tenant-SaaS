@@ -13,7 +13,7 @@ exports.addUser = async (req, res) => {
   const { tenantId, role, userId } = req.user;
   const { email, password, fullName, role: newRole = "user" } = req.body;
 
-  if (role !== "tenant_admin" || tenantId !== paramTenantId) {
+  if (role !== "tenant_admin" || tenantId !== parseInt(paramTenantId)) {
     return res.status(403).json({
       success: false,
       message: "Only tenant admin can add users",
