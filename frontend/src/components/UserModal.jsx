@@ -32,13 +32,9 @@ export default function UserModal({
 
     try {
       setLoading(true);
-      console.log('🔵 UserModal submit - Current user:', currentUser);
-      console.log('🔵 UserModal submit - Resolved tenantId:', resolvedTenantId);
-      console.log('🔵 UserModal submit - User role:', currentUser?.role);
 
       if (user) {
         // UPDATE
-          console.log('🟡 Updating existing user:', user.id);
           await axiosClient.put(`/users/${user.id}`, {
             fullName: form.fullName,
             role: form.role,
@@ -46,23 +42,17 @@ export default function UserModal({
           });
       } else {
         // CREATE
-          const payload = {
+          await axiosClient.post(`/tenants/${resolvedTenantId}/users`, {
             fullName: form.fullName,
             email: form.email,
             password: form.password,
             role: form.role,
-          };
-          console.log('🟡 Creating new user with payload:', payload);
-          console.log('🟡 API endpoint:', `/tenants/${resolvedTenantId}/users`);
-          const response = await axiosClient.post(`/tenants/${resolvedTenantId}/users`, payload);
-          console.log('✅ Create user response:', response.data);
+          });
       }
 
       onSaved();
       onClose();
     } catch (err) {
-      console.error('❌ UserModal error:', err);
-      console.error('❌ Error response data:', err.response?.data);
       setError(
         err.response?.data?.message || err.message || "Operation failed"
       );
