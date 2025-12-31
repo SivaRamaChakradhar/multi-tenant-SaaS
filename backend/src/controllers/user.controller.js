@@ -13,12 +13,25 @@ exports.addUser = async (req, res) => {
   const { tenantId, role, userId } = req.user;
   const { email, password, fullName, role: newRole = "user" } = req.body;
 
-  if (role !== "tenant_admin" || tenantId !== parseInt(paramTenantId)) {
+  console.log('🔵 ADD USER - Params:', { paramTenantId });
+  console.log('🔵 ADD USER - From JWT:', { tenantId, role, userId });
+  console.log('🔵 ADD USER - Comparison:', {
+    roleMatch: role === "tenant_admin",
+    tenantIdMatch: tenantId === paramTenantId,
+  });
+
+  // Check: must be tenant_admin and tenantId must match (both are UUIDs)
+  if (role !== "tenant_admin" || tenantId !== paramTenantId) {
+    console.log('❌ ADD USER - FORBIDDEN - Role check:', role !== "tenant_admin", 'TenantId check:', tenantId !== paramTenantId);
     return res.status(403).json({
       success: false,
       message: "Only tenant admin can add users",
     });
   }
+
+  console.log('✅ ADD USER - Validation passed, creating user...');
+
+  console.log('✅ ADD USER - Validation passed, creating user...');
 
   try {
     // Subscription limit check
