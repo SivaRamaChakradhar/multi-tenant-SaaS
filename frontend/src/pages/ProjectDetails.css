@@ -60,8 +60,32 @@
 }
 
 /* TASKS */
-.tasks-section h3 {
+.tasks-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
   margin-bottom: 1.2rem;
+  flex-wrap: wrap;
+  gap: 1rem;
+}
+
+.tasks-section h3 {
+  margin: 0;
+}
+
+.primary-btn {
+  background: linear-gradient(135deg, var(--brand), var(--accent));
+  border: none;
+  color: #000;
+  font-weight: 700;
+  padding: 10px 16px;
+  border-radius: 12px;
+  cursor: pointer;
+  transition: opacity 0.3s;
+}
+
+.primary-btn:hover {
+  opacity: 0.9;
 }
 
 .table-wrapper {
@@ -122,11 +146,21 @@
   border: none;
   cursor: pointer;
   font-size: 0.75rem;
+  transition: opacity 0.3s;
+}
+
+.actions button:hover {
+  opacity: 0.8;
 }
 
 .btn-success {
   background: rgba(81, 207, 102, 0.2);
   color: #51cf66;
+}
+
+.btn-edit {
+  background: rgba(108, 138, 255, 0.2);
+  color: #6c8aff;
 }
 
 .btn-danger {

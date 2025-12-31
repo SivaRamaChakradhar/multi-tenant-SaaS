@@ -1,6 +1,7 @@
 import { useParams } from "react-router-dom";
 import { useEffect, useState } from "react";
 import axiosClient from "../api/axiosClient";
+import TaskModal from "../components/TaskModal";
 import "./ProjectDetails.css";
 
 export default function ProjectDetails() {
@@ -8,6 +9,8 @@ export default function ProjectDetails() {
 
   const [project, setProject] = useState(null);
   const [tasks, setTasks] = useState([]);
+  const [showModal, setShowModal] = useState(false);
+  const [editingTask, setEditingTask] = useState(null);
 
   useEffect(() => {
     loadData();
@@ -50,7 +53,12 @@ export default function ProjectDetails() {
 
       {/* TASKS */}
       <div className="tasks-section">
-        <h3>Tasks</h3>
+        <div className="tasks-header">
+          <h3>Tasks</h3>
+          <button className="primary-btn" onClick={() => setShowModal(true)}>
+            + Add Task
+          </button>
+        </div>
 
         {tasks.length === 0 ? (
           <p className="empty-state">No tasks available</p>
@@ -93,6 +101,15 @@ export default function ProjectDetails() {
                         </button>
                       )}
                       <button
+                        className="btn-edit"
+                        onClick={() => {
+                          setEditingTask(t);
+                          setShowModal(true);
+                        }}
+                      >
+                        Edit
+                      </button>
+                      <button
                         className="btn-danger"
                         onClick={() => deleteTask(t.id)}
                       >
@@ -106,6 +123,18 @@ export default function ProjectDetails() {
           </div>
         )}
       </div>
+
+      {showModal && (
+        <TaskModal
+          projectId={projectId}
+          task={editingTask}
+          onClose={() => {
+            setShowModal(false);
+            setEditingTask(null);
+          }}
+          onSaved={loadData}
+        />
+      )}
     </div>
   );
 }
