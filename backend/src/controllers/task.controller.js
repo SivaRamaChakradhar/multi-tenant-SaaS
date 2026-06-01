@@ -127,6 +127,9 @@ exports.listTasks = async (req, res) => {
       `
       SELECT
         t.id,
+        t.project_id,
+        t.tenant_id,
+        t.assigned_to,
         t.title,
         t.description,
         t.status,

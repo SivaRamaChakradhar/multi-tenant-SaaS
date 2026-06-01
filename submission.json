@@ -17,7 +17,7 @@
       },
       "backend": {
         "name": "backend",
-        "port": 5000,
+        "port": 5001,
         "healthCheck": "/api/health"
       },
       "frontend": {
@@ -271,9 +271,9 @@
     ]
   },
   "testing": {
-    "healthCheckUrl": "http://localhost:5000/api/health",
+    "healthCheckUrl": "http://localhost:5001/api/health",
     "frontendUrl": "http://localhost:3000",
-    "backendUrl": "http://localhost:5000",
+    "backendUrl": "http://localhost:5001",
     "databasePort": 5432,
     "testSequence": [
       "docker-compose up -d",

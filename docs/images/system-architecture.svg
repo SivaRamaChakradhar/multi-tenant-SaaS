@@ -25,7 +25,7 @@
   <rect x="475" y="270" width="250" height="180" rx="8" class="box"/>
   <text x="600" y="305" text-anchor="middle" class="text-title">Backend API</text>
   <text x="600" y="330" text-anchor="middle" class="text-subtitle">Node.js + Express</text>
-  <text x="600" y="360" text-anchor="middle" class="text-small">Port: 5000</text>
+  <text x="600" y="360" text-anchor="middle" class="text-small">Port: 5001 (host)</text>
   <rect x="900" y="270" width="250" height="180" rx="8" class="box"/>
   <text x="1025" y="305" text-anchor="middle" class="text-title">Database</text>
   <text x="1025" y="330" text-anchor="middle" class="text-subtitle">PostgreSQL 15</text>

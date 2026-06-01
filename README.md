@@ -116,7 +116,7 @@ The system follows a **service-based multi-tenant architecture**:
 
 ### System Components
 1. **Frontend (React + Vite)** - Port 3000
-2. **Backend API (Node.js + Express)** - Port 5000
+2. **Backend API (Node.js + Express)** - Port 5001 (host; container listens on 5000)
 3. **Database (PostgreSQL 15)** - Port 5432
 
 ### Architecture Diagrams
@@ -125,7 +125,7 @@ The system follows a **service-based multi-tenant architecture**:
 
 **The diagram above shows:**
 - Web browser client connecting to frontend (port 3000)
-- Frontend communicating with backend API (port 5000) via REST + JWT
+- Frontend communicating with backend API (port 5001) via REST + JWT
 - Backend querying PostgreSQL database (port 5432)
 - Authentication flow with JWT token generation and tenant isolation
 - Data filtering by tenant_id at every layer
@@ -173,29 +173,35 @@ git clone https://github.com/SivaRamaChakradhar/multi-tenant-SaaS
 cd multi-tenant-saas
 ```
 
-**2. Start the application:**
+**2. Configure environment (recommended):**
 ```bash
-docker-compose up -d
+cp .env.example .env
+# Edit .env and set a secure JWT_SECRET (32+ characters)
+```
+
+**3. Start the application:**
+```bash
+docker compose up -d
 ```
 
 This single command will:
 - Start PostgreSQL database (port 5432)
 - Run database migrations automatically
 - Load seed data automatically
-- Start backend API (port 5000)
+- Start backend API (port 5001 on host)
 - Start frontend application (port 3000)
 
-**3. Verify services are running:**
+**4. Verify services are running:**
 ```bash
-docker-compose ps
+docker compose ps
 ```
 
-**4. Access the application:**
+**5. Access the application:**
 - Frontend: http://localhost:3000
-- Backend API: http://localhost:5000
-- Health Check: http://localhost:5000/api/health
+- Backend API: http://localhost:5001
+- Health Check: http://localhost:5001/api/health
 
-**5. Login with test credentials:**
+**6. Login with test credentials:**
 
 See [Test Credentials](#-test-credentials) section below.
 
@@ -268,7 +274,7 @@ All test credentials are documented in `submission.json`. Use these to test the 
 
 ### 1. Test Health Check
 ```bash
-curl http://localhost:5000/api/health
+curl http://localhost:5001/api/health
 ```
 
 Expected response:
@@ -282,7 +288,7 @@ Expected response:
 
 ### 2. Test Login API
 ```bash
-curl -X POST http://localhost:5000/api/auth/login \
+curl -X POST http://localhost:5001/api/auth/login \
   -H "Content-Type: application/json" \
   -d '{"email":"admin@demo.com","password":"Demo@123"}'
 ```
@@ -345,7 +351,7 @@ The backend exposes **20+ REST API endpoints**. Complete API documentation is av
 
 **Backend Service:**
 - Build: ./backend/Dockerfile
-- Port: 5000:5000
+- Port: 5001:5000 (host:container)
 - Auto-runs: Migrations + Seed data on startup
 - Health check: HTTP endpoint probe
 - Environment variables: All configured in docker-compose.yml
@@ -555,7 +561,7 @@ multi-tenant-saas/
 ```bash
 # Check if ports are already in use
 netstat -ano | findstr :3000
-netstat -ano | findstr :5000
+netstat -ano | findstr :5001
 netstat -ano | findstr :5432
 
 # Stop and rebuild
@@ -591,7 +597,7 @@ curl http://localhost:3000
 docker-compose logs backend -f
 
 # Test health endpoint
-curl http://localhost:5000/api/health
+curl http://localhost:5001/api/health
 
 # Restart backend
 docker-compose restart backend

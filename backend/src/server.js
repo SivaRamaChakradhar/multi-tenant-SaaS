@@ -1,4 +1,9 @@
 require("dotenv").config();
+// Fail fast if critical secrets are missing
+if (!process.env.JWT_SECRET) {
+  console.error('❌ Missing JWT_SECRET in environment. Set it in a .env file or provide it via your deployment mechanisms.');
+  process.exit(1);
+}
 const app = require("./app");
 const pool = require("./config/db");
 const runMigrations = require("./utils/runMigrations");
@@ -11,7 +16,7 @@ async function startServer() {
     await pool.query("SELECT 1");
     console.log("✅ Database connected");
 
-    await runMigrations(); // 🔥 THIS FIXES EVERYTHING
+    await runMigrations();
 
     await runSeeds();
 

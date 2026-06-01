@@ -2,7 +2,7 @@
 
 Complete reference for all 19+ REST API endpoints of the Multi-Tenant SaaS Platform.
 
-**Base URL:** `http://localhost:5000/api`
+**Base URL:** `http://localhost:5001/api`
 
 ---
 
@@ -952,12 +952,12 @@ Use the test credentials from `submission.json` to test the API:
 
 ```bash
 # Login
-curl -X POST http://localhost:5000/api/auth/login \
+curl -X POST http://localhost:5001/api/auth/login \
   -H "Content-Type: application/json" \
   -d '{"email":"admin@demo.com","password":"Demo@123"}'
 
 # Get current user
-curl http://localhost:5000/api/auth/me \
+curl http://localhost:5001/api/auth/me \
   -H "Authorization: Bearer {token}"
 ```
 

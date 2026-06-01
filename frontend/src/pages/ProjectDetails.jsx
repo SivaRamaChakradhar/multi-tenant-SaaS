@@ -89,7 +89,7 @@ export default function ProjectDetails() {
                         {t.priority}
                       </span>
                     </td>
-                    <td>{t.assignee_name || "-"}</td>
+                    <td>{t.assigned_user_name || "-"}</td>
                     <td>{t.due_date || "N/A"}</td>
                     <td className="actions">
                       {t.status !== "completed" && (

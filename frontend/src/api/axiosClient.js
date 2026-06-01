@@ -1,13 +1,15 @@
 import axios from "axios";
 
-// Always use localhost:5000 when running in browser
-// The frontend runs in browser, not in Docker, so it needs to call localhost
+// Use Vite environment variable when available (supports docker and local)
+const DEFAULT_API = 'http://localhost:5001/api';
+const apiBase = import.meta.env.VITE_API_URL || DEFAULT_API;
+
 const axiosClient = axios.create({
-  baseURL: 'http://localhost:5000/api',
+  baseURL: apiBase,
 });
 
-// Debug: Log the API URL
-console.log('Axios baseURL configured to: http://localhost:5000/api');
+// Debug: Log the resolved API URL
+console.log('Axios baseURL configured to:', apiBase);
 
 axiosClient.interceptors.request.use((config) => {
   const token = localStorage.getItem("token");
