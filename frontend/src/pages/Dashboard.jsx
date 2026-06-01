@@ -20,10 +20,13 @@ export default function Dashboard() {
   const [taskFilter, setTaskFilter] = useState("all");
 
   useEffect(() => {
-    loadDashboard();
-  }, []);
+    if (user?.id) {
+      loadDashboard();
+    }
+  }, [user]);
 
   const loadDashboard = async () => {
+    if (!user?.id) return;
     try {
       const res = await axiosClient.get("/projects");
       const projects = res.data.data?.projects || [];
