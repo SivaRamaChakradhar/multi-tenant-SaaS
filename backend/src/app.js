@@ -15,14 +15,11 @@ app.use(express.json());
 
 app.use(
   cors({
-    origin: [
-      "http://localhost:3000",
-      "http://frontend:3000",
-      "https://multi-tenant-saa-s-k11b.vercel.app"
-    ],
+    origin: true,
     credentials: true,
   })
 );
+app.options("*", cors());
 /* ======================
    HEALTH CHECK (REQUIRED)
 ====================== */
