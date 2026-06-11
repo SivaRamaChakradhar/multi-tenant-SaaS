@@ -17,7 +17,8 @@ app.use(
   cors({
     origin: [
       "http://localhost:3000",
-      "http://frontend:3000" // keep for docker
+      "http://frontend:3000", // keep for docker
+      "https://multi-tenant-saa-s-yjh6.vercel.app"
     ],
     credentials: true,
   })
