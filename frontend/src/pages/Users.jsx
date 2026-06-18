@@ -50,7 +50,10 @@ export default function Users() {
         {user.role === "tenant_admin" && (
           <button
             className="primary-btn"
-            onClick={() => setShowModal(true)}
+            onClick={() => {
+              console.log("button Clicked");
+              setShowModal(true)
+            }}
           >
             + Add User
           </button>
