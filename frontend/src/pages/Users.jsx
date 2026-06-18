@@ -51,7 +51,6 @@ export default function Users() {
           <button
             className="primary-btn"
             onClick={() => {
-              console.log("button Clicked");
               setShowModal(true)
             }}
           >

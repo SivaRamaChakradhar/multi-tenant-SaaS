@@ -8,8 +8,6 @@ const axiosClient = axios.create({
   baseURL: apiBase,
 });
 
-// Debug: Log the resolved API URL
-console.log('Axios baseURL configured to:', apiBase);
 
 axiosClient.interceptors.request.use((config) => {
   const token = localStorage.getItem("token");
